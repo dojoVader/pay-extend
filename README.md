@@ -35,13 +35,47 @@ PayExtend is a NestJS project designed to provide a robust backend solution for 
 - LemonSqueezy integration
 - Authentication and API for Chrome extensions
 
+## Project Structure
+
+This project is set up as a Yarn workspace monorepo, which allows for managing multiple packages within a single repository. The monorepo structure includes:
+
+- **Root Package**: The main NestJS application
+- **vue-dashboard**: A Vue 3 dashboard application
+- **packages/**: Directory for future packages
+
+### Yarn Workspaces
+
+Yarn workspaces enable sharing dependencies across packages and simplify the development workflow. This setup allows you to:
+
+- Install dependencies for all packages with a single command
+- Run scripts across all packages or target specific packages
+- Share code between packages
+- Maintain consistent versioning
+
 ## Project setup
 
 ```bash
+# Install dependencies for all workspaces
 $ yarn install
 ```
 
+### Working with Workspaces
+
+```bash
+# Run a command in a specific workspace
+$ yarn workspace <workspace-name> <command>
+
+# Examples:
+$ yarn workspace vue-dashboard dev    # Start the Vue dashboard
+$ yarn workspace vue-dashboard build  # Build the Vue dashboard
+
+# Run a command in all workspaces
+$ yarn workspaces run <command>
+```
+
 ## Compile and run the project
+
+### NestJS Backend
 
 ```bash
 # development
@@ -54,7 +88,31 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+### Vue Dashboard
+
+```bash
+# development mode with hot-reload
+$ yarn run start:dashboard
+# or
+$ yarn workspace vue-dashboard dev
+
+# build for production
+$ yarn workspace vue-dashboard build
+
+# preview production build
+$ yarn workspace vue-dashboard preview
+```
+
+### Building All Packages
+
+```bash
+# build all workspaces
+$ yarn run build:all
+```
+
 ## Run tests
+
+### NestJS Backend Tests
 
 ```bash
 # unit tests
@@ -65,6 +123,20 @@ $ yarn run test:e2e
 
 # test coverage
 $ yarn run test:cov
+```
+
+### Vue Dashboard Tests
+
+```bash
+# unit tests
+$ yarn workspace vue-dashboard test
+```
+
+### Running Tests Across All Workspaces
+
+```bash
+# run tests in all workspaces
+$ yarn run test:all
 ```
 
 ## Deployment
@@ -153,10 +225,13 @@ The project includes specialized endpoints for Chrome extensions:
 
 The following integrations are planned for future development:
 
-- **Stripe/Polar.sh/LemonSqueezy**: Enhanced features and deeper integration
+- **Stripe** Enhanced features and deeper integration
+- **Polar.sh** Enhanced features and deeper integration
+- **LemonSqueezy**: Enhanced features and deeper integration
 - **Hubspot**: CRM integration for customer management
 - **Liquid Templating**: Dynamic content generation with Liquid templates
-
+- **Authentication and API for Chrome extensions:** Secure endpoints for browser extensions
+- **Query Selector Storage:** Efficient storage and retrieval of query selectors
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
