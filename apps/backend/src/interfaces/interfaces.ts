@@ -9,10 +9,9 @@ export interface IDashboardMenuItem {
   roles?: string[];
 }
 
-
 export interface IDashboardModuleConfiguration {
   menuItems: IDashboardMenuItem[];
-  appName: string;
-  version: string;
-  logoUrl: string;
+  appName?: string;
+  version?: string;
+  logoUrl?: string;
 }
