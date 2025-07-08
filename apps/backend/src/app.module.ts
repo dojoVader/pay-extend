@@ -4,12 +4,18 @@ import { AppService } from './app.service';
 import { LiquidModule } from './modules/liquid/liquid.module';
 import { LIQUID_TEMPLATE_DEFAULT_FOLDER } from './modules/liquid/constants';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
-import {ConfigModule} from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
+import { TypeORMariaDBProvider } from './modules/typeorm-db/mariadb.provider';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ...TypeORMariaDBProvider],
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.development.env',
+    }),
+
     LiquidModule.forRoot({
       root: LIQUID_TEMPLATE_DEFAULT_FOLDER, // Directory where your Liquid templates are stored
       extname: '.liquid', // File extension for Liquid templates
@@ -28,6 +34,7 @@ import {ConfigModule} from '@nestjs/config';
         },
       ],
     }),
+    AuthModule,
   ],
 })
 export class AppModule {}
