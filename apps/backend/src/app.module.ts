@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { LiquidModule } from './modules/liquid/liquid.module';
 import { LIQUID_TEMPLATE_DEFAULT_FOLDER } from './modules/liquid/constants';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import {ConfigModule} from '@nestjs/config';
 
 @Module({
   controllers: [AppController],
