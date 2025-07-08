@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { LiquidService } from './liquid/service/liquid.service';
+import { LiquidService } from './modules/liquid/service/liquid.service';
 import { Liquid } from 'liquidjs';
 
 @Injectable()
 export class AppService {
-  constructor(private liquidService: LiquidService) {
-
-  }
+  constructor(private liquidService: LiquidService) {}
   getHello(): string {
     return 'Hello World!';
   }

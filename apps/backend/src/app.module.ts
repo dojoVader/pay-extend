@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { LiquidModule } from './liquid/liquid.module';
-import { LiquidService } from './liquid/service/liquid.service';
-import { LIQUID_TEMPLATE_DEFAULT_FOLDER } from './liquid/constants';
+import { LiquidModule } from './modules/liquid/liquid.module';
+import { LIQUID_TEMPLATE_DEFAULT_FOLDER } from './modules/liquid/constants';
 
 @Module({
   controllers: [AppController],
