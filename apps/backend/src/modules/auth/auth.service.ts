@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '../../dtos/entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,5 +36,17 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.userRepository.findOneBy({ email: username });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    const isPasswordMatched = await bcrypt.compare(pass, user.password);
+    if (!isPasswordMatched) {
+      throw new UnauthorizedException('Invalid password');
+    }
+    return user;
   }
 }

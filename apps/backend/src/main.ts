@@ -11,5 +11,6 @@ async function bootstrap() {
   const _liquidService = app.get(AppService);
   expressApp.engine('liquid', _liquidService.getLiquidEngine().express());
   await app.listen(process.env.PORT ?? 3000);
+  console.log(`Application is running on: ${process.env.PORT}`);
 }
 bootstrap().then();

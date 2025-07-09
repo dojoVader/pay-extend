@@ -5,17 +5,28 @@ import { LiquidModule } from './modules/liquid/liquid.module';
 import { LIQUID_TEMPLATE_DEFAULT_FOLDER } from './modules/liquid/constants';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfigModule } from '@nestjs/config';
-import { TypeORMariaDBProvider } from './modules/typeorm-db/mariadb.provider';
 import { AuthModule } from './modules/auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { LocalStrategy } from './modules/auth/strategies/local.strategy';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, ...TypeORMariaDBProvider],
+  providers: [AppService, LocalStrategy],
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.development.env',
     }),
-
+    TypeOrmModule.forRoot({
+      type: 'mariadb',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [__dirname + '../dtos/entities/*.entity{.ts,.js}'],
+      synchronize: true,
+      logging: false,
+    }),
     LiquidModule.forRoot({
       root: LIQUID_TEMPLATE_DEFAULT_FOLDER, // Directory where your Liquid templates are stored
       extname: '.liquid', // File extension for Liquid templates
