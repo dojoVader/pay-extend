@@ -165,6 +165,9 @@ importers:
       '@primeuix/themes':
         specifier: ^1.2.1
         version: 1.2.1
+      '@primevue/forms':
+        specifier: ^4.3.6
+        version: 4.3.6(vue@3.5.17(typescript@5.8.2))
       '@tailwindcss/vite':
         specifier: ^4.1.11
         version: 4.1.11(vite@7.0.2(@types/node@22.16.0)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0))
@@ -1209,6 +1212,10 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
+  '@primeuix/forms@0.1.0':
+    resolution: {integrity: sha512-LctcQidb+B5PuvAFWH24YH/SIzmHlOabLHpaTeGY/k51iBv1WyCp+5w9JMYuMB/BplSvV0ZGySxQVkN5Azr/aQ==}
+    engines: {node: '>=12.11.0'}
+
   '@primeuix/styled@0.7.0':
     resolution: {integrity: sha512-xUqMdQb75izeDkNWFK1QlU15aUl5LIU97Fq68IXOhrqqLsKEBnj5ftntFZrENQW70jAHwALdWP4EOGi/poc9Tg==}
     engines: {node: '>=12.11.0'}
@@ -1228,6 +1235,10 @@ packages:
     engines: {node: '>=12.11.0'}
     peerDependencies:
       vue: ^3.5.0
+
+  '@primevue/forms@4.3.6':
+    resolution: {integrity: sha512-IRYASPRjGAhOGIe3kkEPhFcuSDTnjiAf/qHLWgF33pqBXCE0C9JdPXMiVbWGqDbQDtS713N/DhS2zbUyRNWwBA==}
+    engines: {node: '>=12.11.0'}
 
   '@primevue/icons@4.3.6':
     resolution: {integrity: sha512-QVFmfikMpo4/DObMSbB5kS8MH1OoQrx8N9prEZaMvfFzD3hixxK24l2VrcS5x5/0NnP3szwZwTCmEAutCygX6A==}
@@ -6774,6 +6785,10 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
+  '@primeuix/forms@0.1.0':
+    dependencies:
+      '@primeuix/utils': 0.6.0
+
   '@primeuix/styled@0.7.0':
     dependencies:
       '@primeuix/utils': 0.6.0
@@ -6793,6 +6808,14 @@ snapshots:
       '@primeuix/styled': 0.7.0
       '@primeuix/utils': 0.6.0
       vue: 3.5.17(typescript@5.8.2)
+
+  '@primevue/forms@4.3.6(vue@3.5.17(typescript@5.8.2))':
+    dependencies:
+      '@primeuix/forms': 0.1.0
+      '@primeuix/utils': 0.6.0
+      '@primevue/core': 4.3.6(vue@3.5.17(typescript@5.8.2))
+    transitivePeerDependencies:
+      - vue
 
   '@primevue/icons@4.3.6(vue@3.5.17(typescript@5.8.2))':
     dependencies:
