@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LiquidModule } from './modules/liquid/liquid.module';
-import { LIQUID_TEMPLATE_DEFAULT_FOLDER } from './modules/liquid/constants';
+import {
+  LIQUID_LAYOUTS_FOLDER,
+  LIQUID_TEMPLATE_DEFAULT_FOLDER,
+} from './modules/liquid/constants';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
@@ -29,6 +32,7 @@ import { LocalStrategy } from './modules/auth/strategies/local.strategy';
     }),
     LiquidModule.forRoot({
       root: LIQUID_TEMPLATE_DEFAULT_FOLDER, // Directory where your Liquid templates are stored
+      layouts: LIQUID_LAYOUTS_FOLDER, // Directory for layout templates
       extname: '.liquid', // File extension for Liquid templates
       cache: process.env.NODE_ENV === 'production', // Enable caching in production
       dynamicPartials: true, // Allow dynamic partials

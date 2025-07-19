@@ -1,8 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vueDevTools from 'vite-plugin-vue-devtools';
 import tailwindcss from '@tailwindcss/vite';
 import path from "node:path";
 
@@ -13,11 +11,11 @@ export default defineConfig({
     tailwindcss()
   ],
   build: {
-    outDir: 'dist', // Output bundles to public/js for NestJS to serve
+    outDir: '../backend/public/', // Output bundles to public/js for NestJS to serve
     rollupOptions: {
       // Define multiple entry points
       input: {
-        home: path.resolve(__dirname, 'src/client/home.ts'),
+        login: path.resolve(__dirname, 'src/client/login.ts'),
 
       },
       output: {

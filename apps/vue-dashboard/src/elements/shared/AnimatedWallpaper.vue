@@ -40,7 +40,7 @@ const fadeIn = ref(false);
 const currentImage = computed(() => images.value[currentImageIndex.value] || '');
 
 // Timer reference for cleanup
-let intervalId: number | null = null;
+let intervalId: any = null;
 
 // Fetch images from Unsplash
 const fetchImages = async () => {

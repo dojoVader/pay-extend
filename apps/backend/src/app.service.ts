@@ -12,4 +12,16 @@ export class AppService {
   getLiquidEngine(): Liquid {
     return this.liquidService.getEngine();
   }
+
+  getLiquidViewsPath(): string {
+    const engine = this.getLiquidEngine();
+    if (engine.options.root && Array.isArray(engine.options.root)) {
+      return engine.options.root[0]; // Return the first root path
+    } else if (typeof engine.options.root === 'string') {
+      return engine.options.root; // Return the string root path
+    }
+    throw new Error(
+      'Liquid engine does not have a valid root path configured.',
+    );
+  }
 }
