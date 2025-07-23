@@ -1,10 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @import './base.css';
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+
+body{
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: hsla(0, 0%, 100%, 1);
+    color: hsla(0, 0%, 0%, 1);
+}
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  width: 100%;
+  height: auto;
 }
 
 a,
@@ -24,12 +34,9 @@ a,
 @media (min-width: 1024px) {
   body {
     display: flex;
-    place-items: center;
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+
   }
 }
