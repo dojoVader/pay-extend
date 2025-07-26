@@ -18,6 +18,30 @@
 .menu-item-label{
   span{
     color:grey;
+    &:hover{
+      color: black;
+    }
+  }
+
+
+}
+.menu-item{
+  cursor: pointer;
+  padding: 2% 3%;
+  height: 45px;
+  border-radius: 6px;
+  transition: all 0.5s ease-in-out;
+  &:hover{
+    color: black;
+    font-weight: bold;
+    border: 1px solid #323232;
+    background: white;
+    .menu-item-label{
+      span{
+        color: black;
+      }
+    }
+
   }
 }
 </style>
