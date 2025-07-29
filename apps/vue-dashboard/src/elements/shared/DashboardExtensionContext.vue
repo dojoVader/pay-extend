@@ -1,7 +1,7 @@
 
 <template>
   <div class="extension-context-ui px-2 py-2 card flex justify-center">
-    <Select v-model="selectedCity" :options="groupedCities" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select Extension Settings" class="w-full md:w-56">
+    <Select v-model="selectedCity" :options="groupedCities" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select Extension" class="w-full md:w-56">
       <template #optiongroup="slotProps">
         <div class="flex items-center h-full">
           <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`mr-2 flag flag-${slotProps.option.code.toLowerCase()}`" style="width: 18px" />

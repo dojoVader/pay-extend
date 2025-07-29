@@ -37,7 +37,7 @@ import ScrollPanel from 'primevue/scrollpanel';
   margin-top: 0.5%;
   margin-right: 0.5%;
   border: 1px solid #1e1e1e;
-  height: 98%;
+  height: 88%;
   overflow-y: auto;
   padding-bottom: 2%;
 }
