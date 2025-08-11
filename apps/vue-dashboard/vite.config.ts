@@ -11,7 +11,7 @@ export default defineConfig({
     tailwindcss()
   ],
   build: {
-    outDir: '../backend/public/', // Output bundles to public/js for NestJS to serve
+    outDir: 'exports/',
     rollupOptions: {
       // Define multiple entry points
       input: {

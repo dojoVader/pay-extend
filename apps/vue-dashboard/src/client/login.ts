@@ -2,7 +2,7 @@ import './../assets/main.css'
 import {createApp} from "vue";
 import { createPinia } from 'pinia'
 
-import Login from "@/entrypoint/login.vue";
+import Login from "./../entrypoint/login.vue";
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 

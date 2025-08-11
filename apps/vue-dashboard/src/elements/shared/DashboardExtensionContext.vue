@@ -27,7 +27,7 @@
   font-size: 13px !important;
 }
 </style>
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import Select from 'primevue/select';
 

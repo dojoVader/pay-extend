@@ -32,13 +32,12 @@
   border-radius: 6px;
   transition: all 0.5s ease-in-out;
   &:hover{
-    color: black;
     font-weight: bold;
-    border: 1px solid #323232;
-    background: white;
+    background: rgba(255, 255, 255, 0.18);
+    color:white;
     .menu-item-label{
       span{
-        color: black;
+        color: white;
       }
     }
 
