@@ -1,20 +1,39 @@
-import { Controller, Post, Body, UseFilters, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Header,
+  Req,
+  HttpException, HttpStatus
+} from "@nestjs/common";
 import { AuthService } from './auth.service';
-import { UnauthorizedFilter } from './filters';
-import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from './guards/roles.guard';
+import { APIResponse } from '../../dtos/response/APIResponse';
+import { LoginRequest } from '../../dtos/requests/login.request';
+import { RegisterRequest } from "../../dtos/requests/register.request";
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() body: { email: string; password: string }) {
-    return this.authService.register(body.email, body.password);
+  @Header('accept', 'application/json')
+  @Header('Content-Type', 'application/json')
+  async register(@Body() body: RegisterRequest) {
+    if (body?.username && body?.password) {
+      return this.authService.register(body.username, body.password);
+    } else {
+      throw new HttpException(
+        'All fields are required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Post('login')
-  async login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+  @Header('accept', 'application/json')
+  @Header('Content-Type', 'application/json')
+  async login(@Body() body: LoginRequest) {
+    console.log(body);
+    return this.authService.login(body.username, body.password);
   }
 }

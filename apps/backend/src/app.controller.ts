@@ -2,7 +2,6 @@ import { Controller, Get, Render, UseFilters, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UnauthorizedFilter } from './modules/auth/filters';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from './modules/auth/guards/roles.guard';
 
 @Controller()
 @UseFilters(UnauthorizedFilter)
@@ -10,7 +9,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  @UseGuards(AuthGuard('local'), RolesGuard)
+  @UseGuards(AuthGuard('local'))
   @Render('hello') // The liquid template check if it works
   login() {
     return { message: 'Hello, Liquid!' };
@@ -26,5 +25,11 @@ export class AppController {
   @Render('logout')
   logout() {
     return { message: 'Logged Out' };
+  }
+
+  @Get('/dashboard')
+  @Render('dashboard')
+  index() {
+    return { message: 'Dashboard' };
   }
 }

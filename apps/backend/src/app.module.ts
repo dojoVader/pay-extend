@@ -10,11 +10,10 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LocalStrategy } from './modules/auth/strategies/local.strategy';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, LocalStrategy],
+  providers: [AppService],
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.development.env',
@@ -26,9 +25,11 @@ import { LocalStrategy } from './modules/auth/strategies/local.strategy';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [__dirname + '../dtos/entities/*.entity{.ts,.js}'],
+      entities: [__dirname + '../src/dtos/entities/*.entity{.ts,.js}'],
+      migrations: [__dirname + '../src/migrations/*{.ts,.js}'],
       synchronize: true,
       logging: false,
+      autoLoadEntities: true,
     }),
     LiquidModule.forRoot({
       root: LIQUID_TEMPLATE_DEFAULT_FOLDER, // Directory where your Liquid templates are stored

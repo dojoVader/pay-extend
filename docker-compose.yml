@@ -9,7 +9,7 @@ services:
       - '3000:3000'
     environment:
       - DATABASE_HOST=mariadb
-      - DATABASE_PORT=3306
+      - DATABASE_PORT=3308
       - DATABASE_USER=nestjs_user
       - DATABASE_PASSWORD=nestjs_password
       - DATABASE_NAME=nestjs_db
@@ -24,12 +24,9 @@ services:
   mariadb:
     image: mariadb:10.9
     environment:
-      - MYSQL_ROOT_PASSWORD=root_password
       - MYSQL_DATABASE=nestjs_db
       - MYSQL_USER=nestjs_user
       - MYSQL_PASSWORD=nestjs_password
-    ports:
-      - '3306:3306'
     volumes:
       - mariadb-data:/var/lib/mysql
     networks:

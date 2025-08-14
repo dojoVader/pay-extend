@@ -20,4 +20,15 @@ RUN cd vue-dashboard && npm run build
 
 RUN cp vue-dashboard/exports/* -R backend/public/
 
-CMD ["npm", "run", "start"]
+WORKDIR /apps/backend
+
+RUN npm install
+
+
+
+ENV USERNAMER=nestjs_user
+ENV PASSWORDR=nestjs_password
+ENV DB_NAME=nestjs_db
+ENV HOST=localhost
+
+CMD ["npm", "run","start:dev"]

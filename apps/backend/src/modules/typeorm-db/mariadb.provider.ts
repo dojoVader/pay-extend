@@ -14,6 +14,8 @@ export const TypeORMariaDBProvider = [
         entities: [__dirname + '../../dtos/entities/*.entity{.ts,.js}'],
         synchronize: true,
         logging: false,
+        migrations: [__dirname + '../../migrations/*{.ts,.js}'],
+        migrationsRun: true,
       });
       return datasource.initialize();
     },

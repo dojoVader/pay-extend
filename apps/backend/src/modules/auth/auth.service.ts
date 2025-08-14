@@ -1,8 +1,8 @@
 import {
-  BadRequestException,
+  BadRequestException, HttpException, HttpStatus,
   Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+  UnauthorizedException
+} from "@nestjs/common";
 import { User } from '../../dtos/entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,6 +18,17 @@ export class AuthService {
   ) {}
 
   async register(email: string, password: string, role = 'user') {
+
+    // Check if the user already exists
+    const existingUser = await this.userRepository.find({
+      where: { email },
+    });
+    if (existingUser.length > 0) {
+      throw new HttpException(
+        'The user already exists on this platform',
+        HttpStatus.CONFLICT,
+      );
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = this.userRepository.create({
       email,
