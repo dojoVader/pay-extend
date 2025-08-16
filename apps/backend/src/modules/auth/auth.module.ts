@@ -5,22 +5,40 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../dtos/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { LocalStrategy } from './strategies/local.strategy';
+import * as process from 'node:process';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtGuard } from './guards/jwtauth.guard';
+
+console.log(process.env.SECRET); // Ensure this is set in your environment
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtGuard,
+    // },
+    JwtStrategy,
+  ],
   imports: [
+    ConfigModule,
     TypeOrmModule.forFeature([User]),
     PassportModule.register({
       defaultStrategy: 'jwt',
+      session: true,
     }),
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: process.env.SECRET,
       signOptions: {
         expiresIn: 3600,
       },
     }),
   ],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

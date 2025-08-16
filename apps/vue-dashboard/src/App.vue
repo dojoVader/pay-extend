@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import Login from "@/components/Login.vue";
-import AnimatedWallpaper from "@/elements/shared/AnimatedWallpaper.vue";
+
+import DashboardUI from './elements/shared/DashboardUI.vue';
+
 </script>
 
 <template>
 
 
-  <main class="h-full w-full ">
-    <AnimatedWallpaper>
-      <Login />
-    </AnimatedWallpaper>
+  <main class="h-full w-full m-2">
+    <DashboardUI />
   </main>
 </template>
 
@@ -20,10 +17,7 @@ header {
   line-height: 1.5;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+
 
 @media (min-width: 1024px) {
   header {

@@ -1,16 +1,15 @@
 import { Controller, Get, Render, UseFilters, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UnauthorizedFilter } from './modules/auth/filters';
-import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from './modules/auth/guards/roles.guard';
+import { ForbiddenException, UnauthorizedFilter } from './modules/auth/filters';
+import { JwtGuard } from './modules/auth/guards/jwtauth.guard';
 
 @Controller()
-@UseFilters(UnauthorizedFilter)
+@UseFilters(UnauthorizedFilter, ForbiddenException)
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @UseGuards(JwtGuard)
   @Get()
-  @UseGuards(AuthGuard('local'), RolesGuard)
   @Render('hello') // The liquid template check if it works
   login() {
     return { message: 'Hello, Liquid!' };
@@ -26,5 +25,11 @@ export class AppController {
   @Render('logout')
   logout() {
     return { message: 'Logged Out' };
+  }
+
+  @Get('/dashboard')
+  @Render('dashboard')
+  index() {
+    return { message: 'Dashboard' };
   }
 }

@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  nestjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_HOST=mariadb
+      - DATABASE_PORT=3308
+      - DATABASE_USER=nestjs_user
+      - DATABASE_PASSWORD=nestjs_password
+      - DATABASE_NAME=nestjs_db
+    depends_on:
+      - mariadb
+    networks:
+      - app-network
+    volumes:
+      - ./src:/app/src
+    restart: unless-stopped
+
+  mariadb:
+    image: mariadb:10.9
+    environment:
+      - MYSQL_DATABASE=nestjs_db
+      - MYSQL_USER=nestjs_user
+      - MYSQL_PASSWORD=nestjs_password
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  mariadb-data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,6 +10,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
@@ -15,9 +18,20 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService,
+    private config: ConfigService
   ) {}
 
   async register(email: string, password: string, role = 'user') {
+    // Check if the user already exists
+    const existingUser = await this.userRepository.find({
+      where: { email },
+    });
+    if (existingUser.length > 0) {
+      throw new HttpException(
+        'The user already exists on this platform',
+        HttpStatus.CONFLICT,
+      );
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = this.userRepository.create({
       email,
@@ -33,8 +47,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
     const payload = { email: user.email, sub: user.id, role: user.role };
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.config.get<string>('SECRET'),
+    });
+    // Set HTTP-only, same-site cookie
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: accessToken,
     };
   }
 

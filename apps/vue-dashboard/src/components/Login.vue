@@ -3,6 +3,12 @@ import PayExtendIcon from "@/elements/icons/PayExtendIcon.vue";
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import { Config } from "@/constants/config.ts";
+
+type LoginRequest = {
+  email: string;
+  password: string;
+};
 
 const initialValues = {
   email: '',
@@ -11,10 +17,15 @@ const initialValues = {
 
 // Function to handle form submission
 
-const onFormSubmit = (values: any) => {
-  console.log('Form submitted with values:', values);
-  // Here you would typically handle the login logic, e.g., API call
-  console.log(values);
+const onFormSubmit = async({values}) => {
+  const response = await fetch(`${Config.api('/auth/login')}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(values)
+  });
+  localStorage.setItem("access_token", response);
 };
 
 </script>
