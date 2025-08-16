@@ -2,12 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AppService } from './app.service';
 import { join } from 'node:path';
-import { HttpServer } from "@nestjs/common";
+import * as cookieParser from 'cookie-parser';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const bodyLimit = 10_485_760; // 10MiB
+
   const expressApp = app.getHttpAdapter().getInstance();
   // Set up Liquid as the view engine
   expressApp.set('view engine', 'liquid');
@@ -22,6 +23,7 @@ async function bootstrap() {
     prefix: '/public', // Serve static files from the public directory
     index: false, // Disable directory listing
   });
+  app.use(cookieParser()); // Use cookie parser middleware
   await app.listen(process.env.PORT ?? 3000);
   // Set a Public folder for static assets
 

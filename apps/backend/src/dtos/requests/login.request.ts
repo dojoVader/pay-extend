@@ -1,17 +1,16 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-
 export class LoginRequest {
   @IsString()
   @IsNotEmpty()
-  username: string;
+  email: string;
 
   @IsString()
   @IsNotEmpty()
   password: string;
 
-  constructor(username: string, password: string) {
-    this.username = username;
+  constructor(email: string, password: string) {
+    this.email = email;
     this.password = password;
   }
 }
