@@ -15,7 +15,7 @@
 .extension-context-ui .p-select{
   background: #171717;
   border-radius: 6px;
-  padding: 3% 3%;
+  padding: 2% 3%;
   border: 1px solid #202020;
   transition: all 0.5s ease-in-out;
   width: 100%;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DashboardContentHeader from "@/elements/shared/DashboardContentHeader.vue";
 import ScrollPanel from 'primevue/scrollpanel';
+import ExtensionContext from "@/components/ExtensionContext.vue";
 
 </script>
 
@@ -8,12 +9,13 @@ import ScrollPanel from 'primevue/scrollpanel';
 <div class="dashboard-content-section  w-full h-full rounded-sm">
   <DashboardContentHeader>
     <template #title>
-      <h3 class="text-xl text-white font-bold">Welcome User</h3>
-      <span class="text-sm font-bold title-slogan">Friday, July 25, 2025</span>
+      <h3 class="text-xl text-white font-bold">Extension Management</h3>
+      <span class="text-sm font-bold title-slogan">Manage extension</span>
     </template>
   </DashboardContentHeader>
   <ScrollPanel style="height: 100%">
   <div class="dashboard-content-body p-2">
+    <RouterView />
 
   </div>
   </ScrollPanel>
