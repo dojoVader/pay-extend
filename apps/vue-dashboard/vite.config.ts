@@ -16,6 +16,7 @@ export default defineConfig({
       // Define multiple entry points
       input: {
         login: path.resolve(__dirname, 'src/client/login.ts'),
+        portal: path.resolve(__dirname, 'src/client/portal.ts'),
 
       },
       output: {

@@ -10,8 +10,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtGuard } from './modules/auth/guards/jwtauth.guard';
+import { ExtensionContextModule } from './modules/extension-context/extension-context.module';
 
 @Module({
   controllers: [AppController],
@@ -30,7 +29,7 @@ import { JwtGuard } from './modules/auth/guards/jwtauth.guard';
       entities: [__dirname + '../src/dtos/entities/*.entity{.ts,.js}'],
       migrations: [__dirname + '../src/migrations/*{.ts,.js}'],
       synchronize: true,
-      logging: false,
+      logging: true,
       autoLoadEntities: true,
     }),
     LiquidModule.forRoot({
@@ -53,6 +52,7 @@ import { JwtGuard } from './modules/auth/guards/jwtauth.guard';
       ],
     }),
     AuthModule,
+    ExtensionContextModule,
   ],
 })
 export class AppModule {}
