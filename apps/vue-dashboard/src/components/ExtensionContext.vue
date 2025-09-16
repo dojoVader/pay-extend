@@ -4,6 +4,9 @@ import { ProductService } from '@/data/extension';
 import DataView from 'primevue/dataview';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
+import ExtensionContextAdd from '../elements/shared/ExtensionContextAdd.vue';
+
+const showAddModal = ref(false);
 
 const ROWS_PER_PAGE = 5;
 
@@ -54,51 +57,44 @@ const getSeverity = (product: any): HintedString => {
     <div class="flex flex-row justify-between items-center gap-1 mt-5">
       <div>
         <h4 class="mt-3 text-1xl text-white">Extension Apps</h4>
-        <span class="text-sm font-bold text-gray-400"
-          >View existing extensions</span
-        >
+        <span class="text-sm font-bold text-gray-400">View existing extensions</span>
       </div>
       <div>
-        <Button label="Add Extension" rounded />
+        <Button label="Add Extension" rounded @click="showAddModal = true" />
       </div>
     </div>
+
+    <!-- Modal for Add Extension -->
+      <div v-if="showAddModal" class="fixed inset-0 flex items-center justify-center  z-50"
+        @click.self="showAddModal = false">
+        <div class="bg-white rounded shadow-lg p-6 relative w-full max-w-lg">
+          <button @click="showAddModal = false"
+            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">
+            &times;
+          </button>
+          <ExtensionContextAdd :show="true" />
+        </div>
+      </div>
+
     <div class="extension-data-grid pb-5">
-      <DataView
-        :paginator="true"
-        class="mb-5"
-        :total-records="totalRecords"
-        :rowsPerPageOptions="[5, 10, 20]"
-        :rows="ROWS_PER_PAGE"
-        :value="products"
-      >
+      <DataView :paginator="true" class="mb-5" :total-records="totalRecords" :rowsPerPageOptions="[5, 10, 20]"
+        :rows="ROWS_PER_PAGE" :value="products">
         <template #list="slotProps">
           <div class="flex flex-col">
             <div v-for="(item, index) in slotProps.items" :key="index">
-              <div
-                class="flex flex-col sm:flex-row sm:items-center p-6 gap"
-                :class="{
-                  'border-t border-surface-200 dark:border-surface-700':
-                    index !== 0,
-                }"
-              >
+              <div class="flex flex-col sm:flex-row sm:items-center p-6 gap" :class="{
+                'border-t border-surface-200 dark:border-surface-700':
+                  index !== 0,
+              }">
                 <div class="md:w-40 relative">
-                  <img
-                    class="block xl:block mx-auto rounded w-2/6 h-2/6 object-cover"
-                    :src="`${item.extensionLogoUrl}`"
-                    :alt="item.extensionName"
-                  />
+                  <img class="block xl:block mx-auto rounded w-2/6 h-2/6 object-cover" :src="`${item.extensionLogoUrl}`"
+                    :alt="item.extensionName" />
                 </div>
-                <div
-                  class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6"
-                >
-                  <div
-                    class="flex flex-row md:flex-col justify-between items-start gap-2"
-                  >
+                <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                  <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                     <div>
-                      <span
-                        class="font-medium text-surface-500 dark:text-surface-400 text-sm"
-                        >{{ item.extensionDescription }}</span
-                      >
+                      <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
+                        item.extensionDescription }}</span>
                       <div class="text-lg font-medium mt-2">
                         {{ item.extensionName }}
                       </div>
@@ -106,15 +102,11 @@ const getSeverity = (product: any): HintedString => {
                   </div>
                   <div class="flex flex-col md:items-end gap-8">
                     <div class="flex flex-row-reverse md:flex-row gap-2">
-                      <Tag
-                        :value="
-                          item.status === 'active'
-                            ? 'Approved'
-                            : item.status.charAt(0).toUpperCase() +
-                              item.status.slice(1)
-                        "
-                        :severity="getSeverity(item)"
-                      ></Tag>
+                      <Tag :value="item.status === 'active'
+                        ? 'Approved'
+                        : item.status.charAt(0).toUpperCase() +
+                        item.status.slice(1)
+                        " :severity="getSeverity(item)"></Tag>
                     </div>
                   </div>
                 </div>
@@ -128,8 +120,8 @@ const getSeverity = (product: any): HintedString => {
 </template>
 
 <style scoped>
-:root {
-}
+:root {}
+
 .stat-item {
   background: #1e1e1e;
   border: 1px solid #2c2c2c;
@@ -138,14 +130,17 @@ const getSeverity = (product: any): HintedString => {
     border-color 0.3s ease;
   max-width: 240px;
 }
+
 .p-dataview {
   height: auto;
 }
+
 .p-button {
   --p-button-padding-x: 0.7rem;
   --p-button-padding-y: 0.4rem;
   font-size: 0.8rem;
 }
+
 .extension-data-grid {
   height: 400px;
   padding-bottom: 3%;
