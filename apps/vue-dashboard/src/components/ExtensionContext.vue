@@ -3,8 +3,8 @@ import { ref, onMounted } from 'vue';
 import { ProductService } from '@/data/extension';
 import DataView from 'primevue/dataview';
 import Tag from 'primevue/tag';
+import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import 'primeicons/primeicons.css';
 import ExtensionContextAdd from '../elements/shared/ExtensionContextAdd.vue';
 
 
@@ -67,15 +67,11 @@ const getSeverity = (product: any): HintedString => {
     </div>
 
     <!-- Modal for Add Extension -->
-    <div v-if="showAddModal" class="fixed bg-white/30 inset-0 flex items-center justify-center z-50"
+    <Dialog :visible="showAddModal" :closable="false" :style="{ width: '50%' }" modal
       @click.self="showAddModal = false">
-      <div class="bg-black rounded-xl shadow-lg py-6 px-8 relative w-full max-w-lg">
-        <button @click="showAddModal = false" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">
-          <i class="pi pi-times" style="font-size: 1.5rem; color: red"></i>
-        </button>
-        <ExtensionContextAdd :show="true" />
-      </div>
-    </div>
+        <ExtensionContextAdd @close="showAddModal = false"  />
+
+    </Dialog>
 
     <div class="extension-data-grid pb-5">
       <DataView :paginator="true" class="mb-5" :total-records="totalRecords" :rowsPerPageOptions="[5, 10, 20]"

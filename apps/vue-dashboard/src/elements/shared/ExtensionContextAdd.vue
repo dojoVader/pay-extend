@@ -26,6 +26,13 @@ const form = reactive({
   active: true
 })
 
+const Placeholders = {
+  ExtensionID: 'e.g 2879872hjhas',
+  ExtensionName: 'e.g Extension Name',
+  ExtensionDescription: 'Describe it\'s features',
+  ExtensionPublicKey: "Get public key from Chrome Webstore",
+}
+
 const statuses = ["Active", "Inactive", "Pending", "Deprecated"]
 
 function addExtension() {
@@ -47,38 +54,37 @@ const onUpload = () => {
 </script>
 
 <template>
-  <div v-if="show">
-    <form @submit.prevent="addExtension" class="space-y-5 flex flex-col gap-4 text-white">
+    <h1 class="text-2xl font-bold pl-1 mb-5 ">Register your Extension</h1>
+    <form @submit.prevent="addExtension" class="space-y-5 p-1 mt-4 flex flex-col gap-4 text-white">
       <!-- Extension Item ID -->
       <div class="flex  flex-col gap-2">
         <label class="block text-xs mb-1">Extension Item ID *</label>
-        <InputText v-model="form.extensionId" placeholder="EXT123456" class="w-full text-sm" />
+        <InputText v-model="form.extensionId" :placeholder="Placeholders.ExtensionID" class="w-full text-sm" />
+        <small>{{Placeholders.ExtensionID}}</small>
       </div>
 
       <!-- Extension Name -->
       <div class="flex  flex-col gap-2">
         <label class="block text-xs mb-1">Extension Name *</label>
-        <InputText v-model="form.extensionName" placeholder="My Extension" class="w-full text-sm" />
+        <InputText v-model="form.extensionName" :placeholder="Placeholders.ExtensionName" class="w-full text-sm" />
+        <small>{{Placeholders.ExtensionName}}</small>
       </div>
 
       <!-- Extension Description -->
       <div class="flex  flex-col gap-2">
         <label class="block text-xs mb-1">Extension Description *</label>
-        <Textarea v-model="form.extensionDescription" placeholder="This extension provides..." rows="3"
+        <Textarea v-model="form.extensionDescription" :placeholder="Placeholders.ExtensionDescription" rows="3"
           class="w-full text-sm" />
+        <small>{{Placeholders.ExtensionDescription}}</small>
       </div>
 
       <div class="flex  justify-between items-center gap-4">
-        <!-- Status -->
-        <div class="flex-1 flex flex-col gap-2">
-          <label class="block text-xs mb-1">Status</label>
-          <Dropdown v-model="form.status" :options="statuses" placeholder="Select status" class="w-full text-sm" />
-        </div>
 
         <!-- Public Key -->
         <div class="flex-1 flex flex-col gap-2">
           <label class="block text-xs mb-1">Public Key</label>
-          <InputText v-model="form.publicKey" placeholder="pub_key_abc123" class="w-full text-sm" />
+          <InputText v-model="form.publicKey" :placeholder="Placeholders.ExtensionPublicKey"  class="w-full text-sm" />
+          <small>{{Placeholders.ExtensionPublicKey}}</small>
         </div>
       </div>
 
@@ -92,9 +98,9 @@ const onUpload = () => {
         <div class="card w-full">
           <Toast />
           <div class="card flex flex-wrap gap-6 items-center justify-between">
-            <FileUpload ref="fileupload" mode="basic" name="demo[]" url="/api/upload" accept="image/*"
+            <FileUpload ref="fileupload" mode="basic" size="small" name="demo[]" url="/api/upload" accept="image/*"
               :maxFileSize="1000000" @upload="onUpload" />
-            <Button label="Upload" @click="upload" severity="secondary" />
+            <Button size="small" label="Upload" @click="upload" severity="secondary" />
           </div>
 
 
@@ -110,17 +116,23 @@ const onUpload = () => {
         <p class="mt-1 text-xs text-gray-400">Upload image or paste URL</p>
       </div>
 
-      <!-- Active -->
-      <div class="flex items-center gap-2">
-        <Checkbox v-model="form.active" inputId="active" :binary="true" />
-        <label for="active" class="ml-2 text-xs">Active</label>
-      </div>
+
 
       <!-- Actions -->
       <div class="flex justify-end gap-3 pt-4">
-        <Button label="Cancel" severity="secondary" @click="$emit('close')" />
-        <Button label="Save" type="submit" />
+        <Button size="small" :style="{ width: '10%' }" label="Cancel" class="p-2 rounded" severity="secondary" @click="$emit('close')" />
+        <Button size="small" :style="{ width: '10%' }" label="Save" class="p-2 rounded" type="submit" />
       </div>
     </form>
-  </div>
 </template>
+
+<style scoped>
+label{
+  color:white;
+  font-weight: bold;
+}
+
+h1{
+  margin-bottom: 2%;
+}
+</style>

@@ -5,8 +5,8 @@ import Aura from '@primeuix/themes/aura';
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-import { createRouter, createWebHistory } from 'vue-router';
-import { routes } from './routes/routes';
+import { createMemoryHistory, createRouter, createWebHistory } from "vue-router";
+import { routes } from "@/routes/routes.ts";
 
 const router = createRouter({
   history: createWebHistory(),
