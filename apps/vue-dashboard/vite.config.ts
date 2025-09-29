@@ -11,6 +11,9 @@ export default defineConfig({
     tailwindcss()
   ],
   build: {
+    watch: {
+      clearScreen: true,
+    },
     outDir: '../backend/public/', // Output bundles to public/js for NestJS to serve
     rollupOptions: {
       // Define multiple entry points
