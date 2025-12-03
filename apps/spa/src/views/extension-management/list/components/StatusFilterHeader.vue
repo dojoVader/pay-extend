@@ -15,15 +15,6 @@
         <option>Pending</option>
       </select>
     </div>
-    <div class="flex gap-2 items-center flex-wrap">
-      <button type="button" class="btn btn-sm bg-transparent border border-dashed border-primary text-primary hover:bg-primary/10">
-        <Icon icon="lucide:download" class="size-4"></Icon>
-        Import
-      </button>
-      <button type="button" class="btn btn-sm size-7.5 bg-default-100 text-default-500 hover:bg-default-1500 hover:text-white">
-        <Icon icon="lucide:sliders-horizontal" class="size-4"></Icon>
-      </button>
-    </div>
   </div>
 </template>
 
