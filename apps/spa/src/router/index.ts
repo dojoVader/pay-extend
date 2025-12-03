@@ -280,12 +280,12 @@ const router = createRouter({
       component: () => import("@/views/invoice/add/index.vue")
     },
     {
-      path: "/user/list",
-      name: "List View",
+      path: "/extension-management/index",
+      name: "Extension Management",
       meta: {
-        title: "List View"
+        title: "Extension Management"
       },
-      component: () => import("@/views/user/list/index.vue")
+      component: () => import("@/views/extension-management/list/index.vue")
     },
     {
       path: "/user/grid",

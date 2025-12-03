@@ -24,7 +24,7 @@ export const menuItems: MenuItemType[] = [
     label: "Extension",
     icon: "lucide:picture-in-picture-2",
     children: [
-      { key: "hr", label: "Home", url: "/dashboard/hr" },
+      { key: "extension-management", label: "Extension Management", url: "/extension-management/index" },
       { key: "dom-selector", label: "DOM Selector", url: "#" },
       { key: "locale", label: "Locale", url: "#" },
       { key: "logs", label: "Logs", url: "#" }
