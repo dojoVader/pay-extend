@@ -221,7 +221,7 @@ The project includes specialized endpoints for Chrome extensions:
 - Secure API communication
 - Data synchronization between extensions and backend
 
-## Todo Integrations
+### Todo Integrations
 
 The following integrations are planned for future development:
 
@@ -229,7 +229,7 @@ The following integrations are planned for future development:
 - **Polar.sh** Enhanced features and deeper integration
 - **LemonSqueezy**: Enhanced features and deeper integration
 - **Hubspot**: CRM integration for customer management
-- **Liquid Templating**: Dynamic content generation with Liquid templates
+- **Liquid Templating**: Dynamic content generation with Liquid templates [x]
 - **Authentication and API for Chrome extensions:** Secure endpoints for browser extensions
 - **Query Selector Storage:** Efficient storage and retrieval of query selectors
 ## Support

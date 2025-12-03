@@ -1,7 +1,7 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { IDashboardModuleConfiguration } from '../../interfaces/interfaces';
 import { DASHBOARD_MENU_ITEMS } from './constants';
-import { DashboardService } from './services/DashboardService';
+import { DashboardService } from './services/dashboard.service';
 import { DASHBOARD_APPLICATION_SETTINGS } from './constants/dashboard.constants';
 
 @Module({
