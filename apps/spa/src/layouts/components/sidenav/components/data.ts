@@ -24,7 +24,11 @@ export const menuItems: MenuItemType[] = [
     label: "Extension",
     icon: "lucide:picture-in-picture-2",
     children: [
-      { key: "extension-management", label: "Extension Management", url: "/extension-management/index" },
+      {
+        key: "extension-management",
+        label: "Extension Management",
+        url: "/extension-management/index"
+      },
       { key: "dom-selector", label: "DOM Selector", url: "#" },
       { key: "locale", label: "Locale", url: "#" },
       { key: "logs", label: "Logs", url: "#" }
@@ -40,14 +44,29 @@ export const menuItems: MenuItemType[] = [
     label: "Payment Integration",
     icon: "lucide:messages-square",
     url: "/apps/chat"
-  },{
+  }, {
     key: "digitalocean",
     label: "Digital Ocean",
     icon: "lucide:messages-square",
     url: "/apps/chat"
-  },{
+  }, {
     key: "settings",
     label: "Settings",
+    icon: "lucide:messages-square",
+    url: "/apps/chat"
+  },
+  {
+    key: "firebase-center",
+    label: "Firebase Center",
+    isTitle: true
+  }, {
+    key: "firebase-database",
+    label: "Firestore",
+    icon: "lucide:messages-square",
+    url: "/apps/chat"
+  }, {
+    key: "firebase-authentication",
+    label: "Authentication",
     icon: "lucide:messages-square",
     url: "/apps/chat"
   }

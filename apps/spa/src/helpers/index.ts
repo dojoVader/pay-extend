@@ -5,12 +5,12 @@ export const currency: CurrencyType = '$'
 export const currentYear = new Date().getFullYear()
 
 export const appFavicon = '/favicon.ico'
-export const appName = 'Tailwick'
-export const appTitle = 'Tailwick - Tailwind CSS 3 Admin Layout & UI Kit Template'
-export const appDescription: string = 'A fully featured admin theme which can be used to build CRM, CMS, etc.'
+export const appName = 'Payextend'
+export const appTitle = 'Payextend - The Premium dashboard for Chrome extension integration'
+export const appDescription: string = 'A fully featured admin theme that handles Chrome extension integration.'
 
-export const author: string = 'Themesdesign'
-export const authorWebsite: string = 'https://themesdesign.in/'
+export const author: string = 'Retani Consults'
+export const authorWebsite: string = 'https://retaniconsults.com/'
 export const authorContact: string = ''
 
 export const basePath: string = ''
