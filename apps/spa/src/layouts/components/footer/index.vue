@@ -6,13 +6,12 @@
         © {{ appName }}
       </div>
       <div class="md:flex hidden gap-2 item-center md:justify-end">
-        Design &amp; Develop by<RouterLink to="https://themesdesign.in/" target="_blank" class="text-primary">{{ author }}</RouterLink>
+        Powered by<a :href="authorWebsite"  target="_blank" class="text-primary">{{ author }}</a>
       </div>
     </div>
   </footer>
 </template>
 
 <script setup lang="ts">
-import { appName, author, currentYear } from '@/helpers'
-import { RouterLink } from 'vue-router'
+import { appName, author, currentYear, authorWebsite } from '@/helpers'
 </script>

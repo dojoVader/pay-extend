@@ -2,7 +2,7 @@
   <aside id="app-menu" class="app-menu">
     <RouterLink to="/" class="logo-box sticky top-0 flex min-h-topbar-height items-center justify-start px-6 backdrop-blur-xs">
       <div class="logo-light">
-        <img :src="lightlogo" class="logo-lg w-[91%]" alt="Light logo" />
+        <img :src="lightlogo" class="logo-lg w-[65%]" alt="Light logo" />
         <img :src="logo" class="logo-sm h-6" alt="Small logo" />
       </div>
       <div class="logo-dark">
