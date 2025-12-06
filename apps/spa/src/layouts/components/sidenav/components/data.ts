@@ -43,10 +43,10 @@ export const menuItems: MenuItemType[] = [
     isTitle: true
   },
   {
-    key: "payment",
+    key: "integration",
     label: "Payment Integration",
     icon: "lucide:hand-coins",
-    url: "/apps/chat"
+    url: "/integrations/payment"
   }, {
     key: "digitalocean",
     label: "Digital Ocean",

@@ -22,13 +22,20 @@ const router = createRouter({
         title: "Extension Management"
       },
       component: () => import("@/views/extension-management/list/index.vue")
-    },{
+    }, {
       path: "/extension/dom-selector",
       name: "DOM Selectors",
       meta: {
         title: "DOM Selectors"
       },
       component: () => import("@/views/dom-selectors/list/index.vue")
+    }, {
+      path: "/integrations/payment",
+      name: "Payment Integrations",
+      meta: {
+        title: "Payment Integrations"
+      },
+      component: () => import("@/views/integrations/payment/index.vue")
     }
   ]
 });
