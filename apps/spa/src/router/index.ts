@@ -36,6 +36,13 @@ const router = createRouter({
         title: "Payment Integrations"
       },
       component: () => import("@/views/integrations/payment/index.vue")
+    }, {
+      path: "/integrations/payment/stripe",
+      name: "Stripe",
+      meta: {
+        title: "Stripe Settings"
+      },
+      component: () => import("@/views/integrations/payment/stripe/index.vue")
     }
   ]
 });
