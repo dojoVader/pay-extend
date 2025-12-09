@@ -29,7 +29,16 @@ const router = createRouter({
         title: "DOM Selectors"
       },
       component: () => import("@/views/dom-selectors/list/index.vue")
-    }, {
+    },
+    {
+      path: "/extension/logs",
+      name: "Logs",
+      meta: {
+        title: "Logs"
+      },
+      component: () => import("@/views/extension-logs/list/index.vue")
+    },
+    {
       path: "/integrations/payment",
       name: "Payment Integrations",
       meta: {

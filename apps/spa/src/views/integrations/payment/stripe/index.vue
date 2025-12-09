@@ -28,7 +28,7 @@
             <div class="w-4/6 flex flex-col gap-3">
               <div class="flex items-center gap-2">
                 <span class="text-sm text-gray-300 mr-2">Active:</span>
-                <span :class="{'bg-primary': isProduction, 'bg-info': !isProduction}" class="badge py-0.5 px-2.5 text-xs font-medium rounded bg-primary text-white">{{ isProduction ? 'Live' : 'Test' }}</span>
+                <span :class="{'bg-danger': isProduction, 'bg-info': !isProduction}" class="badge py-0.5 px-2.5 text-xs font-medium rounded-full text-white">{{ isProduction ? 'Live' : 'Test' }}</span>
               </div>
 
               <div>
