@@ -44,18 +44,6 @@ export const menuItems: MenuItemType[] = [
     url: '/integrations/payment'
   },
   {
-    key: 'digitalocean',
-    label: 'Digital Ocean',
-    icon: 'lucide:cloudy',
-    url: '/apps/chat'
-  },
-  {
-    key: 'settings',
-    label: 'Settings',
-    icon: 'lucide:sliders-vertical',
-    url: '/apps/chat'
-  },
-  {
     key: 'firebase-center',
     label: 'Firebase Center',
     isTitle: true
