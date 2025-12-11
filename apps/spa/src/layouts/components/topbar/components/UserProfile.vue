@@ -35,7 +35,7 @@
           Upgrade Pro
         </RouterLink>
         <div class="border-t border-default-200 -mx-2 my-1"></div>
-        <RouterLink class="flex items-center gap-x-3.5 py-1.5 font-medium px-3 text-default-600 hover:bg-default-150 rounded" to="/basic-auth/logout">
+        <RouterLink class="flex items-center gap-x-3.5 py-1.5 font-medium px-3 text-default-600 hover:bg-default-150 rounded" to="/auth/logout">
           <Icon icon="lucide:log-out" class="size-4"></Icon>
           Sign Out
         </RouterLink>
