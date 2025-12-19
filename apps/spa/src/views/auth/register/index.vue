@@ -1,184 +1,115 @@
 <template>
-  <Auth>
-    <div class="mt-8 text-center">
-      <h4 class="mb-2.5 text-xl font-semibold text-primary">Create your free account</h4>
-      <p class="text-base text-default-500">Get your free Payextend account now</p>
-    </div>
-    <form @submit.prevent="onSubmit" class="text-left w-full mt-10">
-      <div class="mb-4">
-        <label for="email" class="block font-medium text-default-900 text-sm mb-2">Enter email</label>
-        <input v-model="form.email" @input="onChange('email')" type="text" id="email" class="form-input" :class="errors.email ? 'border border-red-400' : ''" placeholder="Enter Username or email" style="padding: 0 12px" />
-        <p v-if="errors.email" class="text-sm text-red-500 mt-1">{{ errors.email }}</p>
+  <div class="min-h-screen flex items-stretch bg-gray-800 text-white">
+    <!-- Left sidebar -->
+    <aside class="w-80 bg-gray-900/80 px-8 py-10 hidden md:flex flex-col gap-8">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center">
+
+        </div>
+        <h1 class="text-lg font-semibold">{{ appName }}</h1>
       </div>
-      <div class="mb-4">
-        <label for="Username" class="block font-medium text-default-900 text-sm mb-2">Username</label>
-        <input v-model="form.username" @input="onChange('username')" type="text" id="Username" class="form-input" :class="errors.username ? 'border border-red-400' : ''" placeholder="Enter Username" style="padding: 0 12px" />
-        <p v-if="checkingUsername" class="text-xs text-default-500 mt-1">Checking availability...</p>
-        <p v-if="errors.username" class="text-xs text-red-500 mt-1">{{ errors.username }}</p>
-        <p v-if="usernameAvailable && !errors.username" class="text-sm text-green-500 mt-1">Username available</p>
+
+      <nav class="flex-1">
+        <ol class="space-y-6">
+          <li v-for="(s) in steps" :key="s.title" class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+              <div v-html="s.svgIcon" class="w-5 h-5"></div>
+            </div>
+
+            <div class="flex flex-col">
+
+              <p class="text-sm font-semibold">{{ s.title }}</p>
+              <p class="text-xs text-white">{{ s.subtitle }}</p>
+            </div>
+          </li>
+        </ol>
+      </nav>
+
+      <div class="text-sm text-white">
+        <a href="#" class="inline-flex items-center gap-2 hover:text-white"> A Retani Consult toolkit for SAAS Chrome Extensions</a>
       </div>
-      <div class="mb-4">
-        <label for="Password" class="block font-medium text-default-900 text-sm mb-2">Password</label>
-        <input v-model="form.password" @input="onChange('password')" type="password" id="Password" class="form-input" :class="errors.password ? 'border border-red-400' : ''" placeholder="Enter Password" style="padding: 0 12px" />
-        <p v-if="errors.password" class="text-sm text-red-500 mt-1">{{ errors.password }}</p>
+    </aside>
+
+    <!-- Right panel (main) -->
+    <main class="flex-1 flex justify-center px-6">
+      <div class="max-w-md w-full">
+        <div class="flex flex-col gap-1 mb-6 mt-10">
+          <h2 class="text-2xl font-semibold text-left">Welcome to {{ appName }}</h2>
+          <p class="text-sm text-white">Setup company details to get started.</p>
+        </div>
+
+        <form @submit.prevent="createAccount" class="space-y-8">
+          <div>
+            <label for="workspace" class="block text-sm font-medium text-white mb-2">
+              e.g Your organization name
+            </label>
+            <input type="text" id="workspace" placeholder="Organization Name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-white mb-2">
+              Your support email address
+            </label>
+            <p class="text-sm text-amber-50 mb-4">Add email address, all logs and notifications will be sent to this address.</p>
+            <input v-model="form.email" type="email" id="email" placeholder="e.g support@email.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+
+          </div>
+
+          <!-- Added username and password fields -->
+          <div>
+            <label for="username" class="block text-sm font-medium text-white mb-2">Username</label>
+            <input v-model="form.username" type="text" id="username" placeholder="e.g johndoe" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-white mb-2">Password</label>
+            <input v-model="form.password" type="password" id="password" placeholder="Choose a password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+          </div>
+
+
+
+          <div class="pt-6">
+            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg transition">
+              Save and continue
+            </button>
+          </div>
+        </form>
       </div>
-      <p class="italic text-sm font-medium text-default-500">By registering you agree to the Tailwick <RouterLink to="" class="underline">Terms of Use</RouterLink></p>
-      <div class="mt-10 text-center">
-        <button type="submit" class="btn bg-primary text-white w-full" :disabled="loading">{{ loading ? 'Creating...' : 'Sign Up' }}</button>
-      </div>
-      <div class="my-9 relative text-center before:absolute before:top-2.5 before:left-0 before:border-t before:border-t-default-200 before:w-full before:h-0.5 before:right-0 before:-z-0">
-        <h4 class="relative z-1 py-0.5 px-2 inline-block font-medium bg-card text-default-600">Create Account with</h4>
-      </div>
-      <div class="flex w-full justify-center items-center gap-2">
-        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">
-          <Icon icon="logos:google-icon" class="iconify-color"></Icon>
-          Use Google
-        </RouterLink>
-        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">
-          <Icon icon="logos:apple" class="iconify text-mono"></Icon>
-          Use Apple
-        </RouterLink>
-      </div>
-      <div class="mt-10 text-center">
-        <p class="text-base text-default-500">
-          Already have an account ?
-          <RouterLink to="/auth/login" class="font-semibold underline hover:text-primary transition duration-200">Login</RouterLink>
-        </p>
-      </div>
-    </form>
-  </Auth>
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { RouterLink } from 'vue-router'
-import Auth from '@/layouts/auth.vue'
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { appName } from "@/helpers";
 
-// form state
-const form = reactive({ email: '', username: '', password: '' })
-const errors = reactive<{ [k: string]: string | null }>({ email: null, username: null, password: null })
-const loading = ref(false)
-const checkingUsername = ref(false)
-const usernameAvailable = ref(false)
+const stripeSvg = `<svg fill="#ffffff" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>Stripe icon</title><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z"></path></g></svg>`;
 
-const router = useRouter()
 
-// validation regex
-const emailRegex = /^\S+@\S+\.\S+$/
-const passwordRegex = /^(?=.*\d).{8,}$/ // at least 8 chars and one number
+const steps = [
+  { title: 'Stripe Integration', subtitle: 'Accept Stripe Payments with minimal config', svgIcon: stripeSvg },
+  {title: 'Logs', subtitle: 'View extension logs and errors in one place', svgIcon: `<svg fill="#ffffff" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>Logs icon</title><path d="M12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0ZM12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22Z"></path><path d="M16.7071 7.29289C16.3166 6.90237 15.6834 6.90237 15.2929 7.29289L10.2929 12.2929C9.90237 12.6834 9.90237 13.3166 10.2929 13.7071L13.2929 16.7071C13.6834 17.0976 14.3166 17.0976 14.7071 16.7071C15.0976 16.3166 15.0976 15.6834 14.7071 15.2929L11.4142 12L16.7071 7.29289Z"></path></g></svg>` },
+  {title: 'DOM Selector', subtitle: 'Easily manage DOM elements for your extensions', svgIcon: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>language_xml</title>  <path d="M12.89,3l2,.4L11.11,21l-2-.4L12.89,3m6.7,9L16,8.41V5.58L22.42,12,16,18.41V15.58L19.59,12m-18,0L8,5.58V8.41L4.41,12,8,15.58v2.83Z"></path> </g></svg>` }
+]
 
-function validateField(field: string) {
-  if (field === 'email') {
-    if (!form.email) {
-      errors.email = 'Email is required'
-      return false
-    }
-    if (!emailRegex.test(form.email)) {
-      errors.email = 'Enter a valid email'
-      return false
-    }
-    errors.email = null
-    return true
+const activeStep = ref(0)
+
+const form = ref({ email: '', username: '', password: '' })
+
+function createAccount() {
+  // small client-side validation and step progression adapted for this setup page
+  if (!form.value.email) {
+    // in a real app show toast / inline errors
+    alert('Please provide a support email address')
+    return
   }
-  if (field === 'username') {
-    if (!form.username) {
-      errors.username = 'Username is required'
-      usernameAvailable.value = false
-      return false
-    }
-    // simple client-side username format check
-    if (!/^[a-zA-Z0-9_\-]{3,20}$/.test(form.username)) {
-      errors.username = 'Username must be 3-20 chars and contain only letters, numbers, - or _'
-      usernameAvailable.value = false
-      return false
-    }
-    errors.username = null
-    // trigger availability check (debounced)
-    checkUsernameAvailabilityDebounced(form.username)
-    return true
-  }
-  if (field === 'password') {
-    if (!form.password) {
-      errors.password = 'Password is required'
-      return false
-    }
-    if (!passwordRegex.test(form.password)) {
-      errors.password = 'Password must be at least 8 characters and include a number'
-      return false
-    }
-    errors.password = null
-    return true
-  }
-  return true
-}
 
-function onChange(field: string) {
-  validateField(field)
-}
-
-function validateAll() {
-  const e1 = validateField('email')
-  const e2 = validateField('username')
-  const e3 = validateField('password')
-  return e1 && e2 && e3 && usernameAvailable.value
-}
-
-// mock username availability endpoint
-function mockCheckUsername(username: string) {
-  return new Promise<{ available: boolean }>((resolve) => {
-    checkingUsername.value = true
-    setTimeout(() => {
-      // simple mock: usernames starting with 'taken' are considered unavailable
-      const available = !username.toLowerCase().startsWith('taken')
-      resolve({ available })
-      checkingUsername.value = false
-    }, 500)
-  })
-}
-
-// local debounce implementation to avoid extra dependencies
-function debounceFn<T extends (...args: any[]) => void>(fn: T, wait = 400) {
-  let timer: ReturnType<typeof setTimeout> | null = null
-  return (...args: Parameters<T>) => {
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(() => fn(...args), wait)
-  }
-}
-
-const checkUsernameAvailabilityDebounced = debounceFn(async (username: string) => {
-  usernameAvailable.value = false
-  const res = await mockCheckUsername(username)
-  usernameAvailable.value = res.available
-  if (!res.available) errors.username = 'Username already taken'
-}, 400)
-
-// mock register endpoint
-function mockRegister(data: { email: string; username: string; password: string }) {
-  return new Promise<{ success: boolean; message?: string }>((resolve) => {
-    setTimeout(() => {
-      // accept everything unless username starts with 'error'
-      if (data.username.toLowerCase().startsWith('error')) {
-        resolve({ success: false, message: 'Server error' })
-      } else {
-        resolve({ success: true })
-      }
-    }, 800)
-  })
-}
-
-async function onSubmit() {
-  if (!validateAll()) return
-  loading.value = true
-  const res = await mockRegister({ email: form.email, username: form.username, password: form.password })
-  loading.value = false
-  if (res.success) {
-    console.log('user Registered')
-    await router.push('/auth/verify-email')
+  // simulate success and move to next step
+  if (activeStep.value < steps.length - 1) {
+    activeStep.value++
   } else {
-    // put server error on username for visibility
-    errors.username = res.message || 'Registration failed'
+    // finished onboarding
+    alert('Setup complete — this is a demo flow')
   }
 }
 </script>
