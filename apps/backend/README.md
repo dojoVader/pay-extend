@@ -169,6 +169,8 @@ Check out a few resources that may come in handy when working with NestJS:
 
 This project includes several integrations to help you build powerful web applications and browser extensions:
 
+(See detailed integration guides in the top-level `docs/integrations/` directory — for Firebase Admin SDK setup and Docker secrets examples, see `docs/integrations/firebase-admin.md`.)
+
 ### Firebase Auth / Firestore
 
 Our Firebase integration provides:
