@@ -1,11 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { LiquidModule } from './modules/liquid/liquid.module';
-import {
-  LIQUID_LAYOUTS_FOLDER,
-  LIQUID_TEMPLATE_DEFAULT_FOLDER,
-} from './modules/liquid/constants';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
@@ -13,31 +6,23 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExtensionContextModule } from './modules/extension-context/extension-context.module';
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [],
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.development.env',
     }),
     TypeOrmModule.forRoot({
       type: 'mariadb',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [__dirname + '../src/dtos/entities/*.entity{.ts,.js}'],
-      migrations: [__dirname + '../src/migrations/*{.ts,.js}'],
+      host: process.env.DB_HOST || 'db',
+      port: Number(process.env.DB_PORT) || 3306,
+      username: process.env.DB_USERNAME || 'payextend',
+      password: process.env.DB_PASSWORD || 'password',
+      database: process.env.DB_NAME || 'payextend',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      migrations: [__dirname + '/migrations/*{.ts,.js}'],
       synchronize: true,
-      logging: true,
+      logging: false,
       autoLoadEntities: true,
-    }),
-    LiquidModule.forRoot({
-      root: LIQUID_TEMPLATE_DEFAULT_FOLDER, // Directory where your Liquid templates are stored
-      layouts: LIQUID_LAYOUTS_FOLDER, // Directory for layout templates
-      extname: '.liquid', // File extension for Liquid templates
-      cache: process.env.NODE_ENV === 'production', // Enable caching in production
-      dynamicPartials: true, // Allow dynamic partials
     }),
     DashboardModule.forRoot({
       appName: 'PayExtend',

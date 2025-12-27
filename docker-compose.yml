@@ -1,41 +1,56 @@
-version: '3.8'
-
 services:
-  nestjs-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    environment:
-      - DATABASE_HOST=mariadb
-      - DATABASE_PORT=3308
-      - DATABASE_USER=nestjs_user
-      - DATABASE_PASSWORD=nestjs_password
-      - DATABASE_NAME=nestjs_db
+  frontend:
+    build: ./apps/spa
     depends_on:
-      - mariadb
-    networks:
-      - app-network
-    volumes:
-      - ./src:/app/src
-    restart: unless-stopped
+      - backend
+    restart: always
 
-  mariadb:
-    image: mariadb:10.9
+  backend:
+    build: ./apps/backend
     environment:
-      - MYSQL_DATABASE=nestjs_db
-      - MYSQL_USER=nestjs_user
-      - MYSQL_PASSWORD=nestjs_password
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=x64
+      - DB_PASSWORD=password
+      - DB_NAME=payextend_platform
+      - SECRET=Yd8hPzX5qW3rT7gJ9kL2mN4bV6cX8jF1aS3dE5fG7hJ9kL2mN4bV6cX8
+      - PORT=3000
+      # Add other env vars (e.g., JWT secrets, FIREBASE credentials)
+    depends_on:
+      - db
+    restart: always
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
     volumes:
-      - mariadb-data:/var/lib/mysql
-    networks:
-      - app-network
-    restart: unless-stopped
+      - ./apps/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+
+  db:
+    image: mariadb:10.11
+    #image: mysql:8.1
+    command: '--default-authentication-plugin=mysql_native_password'
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=payextend_platform
+      - MYSQL_USER=x64
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306"
+
+  adminer:
+    image: adminer
+    ports:
+      - "9090:8080"
+    depends_on:
+      - db
 
 volumes:
-  mariadb-data:
-
-networks:
-  app-network:
-    driver: bridge
+  mariadb_data:
