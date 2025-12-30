@@ -15,3 +15,14 @@ export const authorContact: string = ''
 
 export const basePath: string = ''
 export const API_BASE_URL = 'http://localhost:3000/api/v1'
+
+export const PAYEXTEND_ENDPOINTS = {
+  HOST: '127.0.0.1:9000',
+  BACKEND: '',
+  LOGIN: '/auth/login',
+  LOGOUT: '/auth/logout',
+  REFRESH_TOKEN: '/auth/refresh-token',
+  USER_PROFILE: '/auth/user-profile',
+}
+
+export const PayextendPath = () => `http://${PAYEXTEND_ENDPOINTS.HOST}${PAYEXTEND_ENDPOINTS.BACKEND}`;

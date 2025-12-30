@@ -41,19 +41,16 @@
       <div class="mt-10 text-center">
         <button type="submit" class="btn bg-primary text-white w-full" :disabled="loading">{{ loading ? 'Signing...' : 'Sign In' }}</button>
       </div>
-      <div class="my-9 relative text-center before:absolute before:top-2.5 before:left-0 before:border-t before:border-t-default-200 before:w-full before:h-0.5 before:right-0 before:-z-0">
-        <h4 class="relative z-1 py-0.5 px-2 inline-block font-medium text-default-600 bg-card">Sign In With</h4>
-      </div>
-      <div class="flex w-full justify-center items-center gap-2">
-        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">
-          <Icon icon="logos:google-icon" class="iconify-color"></Icon>
-          Use Google
-        </RouterLink>
-        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">
-          <Icon icon="logos:apple" class="iconify text-mono"></Icon>
-          Use Apple
-        </RouterLink>
-      </div>
+<!--      <div class="flex w-full justify-center items-center gap-2">-->
+<!--        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">-->
+<!--          <Icon icon="logos:google-icon" class="iconify-color"></Icon>-->
+<!--          Use Google-->
+<!--        </RouterLink>-->
+<!--        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">-->
+<!--          <Icon icon="logos:apple" class="iconify text-mono"></Icon>-->
+<!--          Use Apple-->
+<!--        </RouterLink>-->
+<!--      </div>-->
       <div class="mt-10 text-center">
         <p class="text-base text-default-500">
           Don't have an Account ?
@@ -65,11 +62,14 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { RouterLink } from 'vue-router'
-import Auth from '@/layouts/auth.vue'
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouterLink, useRouter } from "vue-router";
+import Auth from "@/layouts/auth.vue";
+import { reactive, ref } from "vue";
+import { PAYEXTEND_ENDPOINTS, PayextendPath } from "@/helpers";
+import { useAuth } from "@/stores/auth.ts";
+
+// auth User
+const user = useAuth();
 
 // form state
 const form = reactive({ email: '', password: '' })
@@ -120,27 +120,29 @@ function validateAll() {
 }
 
 // mock auth endpoint
-function mockAuth(data: { email: string; password: string }) {
-  return new Promise<{ success: boolean; message?: string }>((resolve) => {
-    setTimeout(() => {
-      if (data.email === 'user@example.com' && data.password === 'password1') {
-        resolve({ success: true })
-      } else {
-        resolve({ success: false, message: 'Invalid credentials'
-        })
-      }
-    }, 700)
-  })
+async function authLogin(data: { email: string; password: string }) {
+  const root = PayextendPath()
+  const res = await fetch(`${root}${PAYEXTEND_ENDPOINTS.LOGIN}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+  return await res.json();
 }
 
 async function onSubmit() {
   if (!validateAll()) return
   loading.value = true
-  const res = await mockAuth({ email: form.email, password: form.password })
+  const res = await authLogin({ email: form.email, password: form.password })
   loading.value = false
-  if (res.success) {
+  if (res.access_token) {
     // navigate to dashboard or show success — for now just console
-    console.log('Logged in')
+    user.setUser({
+      name: res.name,
+      token: res.access_token,
+    })
     await router.push('/dashboard/hr')
   } else {
     // set a generic form error on password for now

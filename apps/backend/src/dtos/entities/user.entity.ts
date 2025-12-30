@@ -12,6 +12,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
+  name: string;
+
   @Column({ default: 'user' })
   role: string; // e.g., 'user', 'admin'
 }

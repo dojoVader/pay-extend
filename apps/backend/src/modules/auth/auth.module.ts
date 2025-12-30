@@ -9,6 +9,8 @@ import { LocalStrategy } from './strategies/local.strategy';
 import * as process from 'node:process';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
+import { JwtGuard } from "./guards/jwtauth.guard";
+import { APP_GUARD } from "@nestjs/core";
 
 console.log(process.env.SECRET); // Ensure this is set in your environment
 
@@ -17,10 +19,6 @@ console.log(process.env.SECRET); // Ensure this is set in your environment
   providers: [
     AuthService,
     LocalStrategy,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtGuard,
-    // },
     JwtStrategy,
   ],
   imports: [

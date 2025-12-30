@@ -3,8 +3,8 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+  UnauthorizedException, UseGuards
+} from "@nestjs/common";
 import { User } from '../../dtos/entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -54,6 +54,7 @@ export class AuthService {
 
     return {
       access_token: accessToken,
+      name: user.name,
     };
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-1">
+  <div class="col-span-1 w-full">
     <div class="card">
       <div class="card-body">
         <div class="flex justify-between">
@@ -14,7 +14,7 @@
         </div>
 
         <client-only>
-          <VueApexCharts type="line" height="315" :options="applicationReceivedChartOptions" :series="applicationReceivedChartseries" />
+          <VueApexCharts type="line" width="100%" height="315" :options="applicationReceivedChartOptions" :series="applicationReceivedChartseries" />
         </client-only>
       </div>
     </div>

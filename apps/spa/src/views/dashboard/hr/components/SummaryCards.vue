@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="grid grid-cols-4">
             <div class="col-span-3">
-              <p class="text-base text-default-500 font-medium">Total Employee</p>
+              <p class="text-base text-default-500 font-medium">Total Payments</p>
               <h5 class="text-3xl font-medium mt-4"><span data-target="615">615</span></h5>
             </div>
             <div>
@@ -24,7 +24,7 @@
         <div class="card-body">
           <div class="grid grid-cols-4">
             <div class="col-span-3">
-              <p class="text-base text-default-500 font-medium">Total Application</p>
+              <p class="text-base text-default-500 font-medium">Failed Payments</p>
               <h5 class="text-3xl font-medium mt-4"><span data-target="174">174</span></h5>
             </div>
             <client-only>
@@ -42,7 +42,7 @@
         <div class="card-body">
           <div class="grid grid-cols-4">
             <div class="col-span-3">
-              <p class="text-base text-default-500 font-medium">Hired Candidates</p>
+              <p class="text-base text-default-500 font-medium">Pending Payments</p>
               <h5 class="text-3xl font-medium mt-4"><span data-target="64">64</span></h5>
             </div>
             <client-only>
@@ -60,7 +60,7 @@
         <div class="card-body">
           <div class="grid grid-cols-4">
             <div class="col-span-3">
-              <p class="text-base text-default-500 font-medium">Rejected Candidates</p>
+              <p class="text-base text-default-500 font-medium">Subscriptions</p>
               <h5 class="text-3xl font-medium mt-4"><span data-target="110">110</span></h5>
             </div>
             <client-only>
