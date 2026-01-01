@@ -10,13 +10,8 @@ import {
   IsString,
 } from 'class-validator';
 
-type MultipleStrategy = 'first' | 'last' | 'all';
 
 @Entity({ name: 'domselectors' })
-@Check(
-  'CHK_selectors_multiple_strategy',
-  "multiple_strategy IN ('first','last','all')",
-)
 export class DomSelector {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -35,20 +30,14 @@ export class DomSelector {
   @Column({ type: 'text' })
   selector: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  @Column({ type: 'text', array: true, default: '{}' })
-  fallbacks: string[];
-
   @IsString()
-  @IsIn(['first', 'last', 'all'])
   @Column({
     name: 'multiple_strategy',
     type: 'varchar',
     length: 20,
     default: 'first',
   })
-  multipleStrategy: MultipleStrategy;
+  multipleStrategy: string;
 
   @IsOptional()
   @IsString()
@@ -62,7 +51,7 @@ export class DomSelector {
   @IsDate()
   @Column({
     name: 'created_at',
-    type: 'timestamptz',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
@@ -70,7 +59,7 @@ export class DomSelector {
   @IsDate()
   @Column({
     name: 'updated_at',
-    type: 'timestamptz',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })

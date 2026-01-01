@@ -15,6 +15,6 @@ export class User {
   @Column()
   name: string;
 
-  @Column({ default: 'user' })
-  role: string; // e.g., 'user', 'admin'
+  @Column({ default: 'admin' })
+  role: string;
 }

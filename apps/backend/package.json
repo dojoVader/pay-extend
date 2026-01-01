@@ -26,7 +26,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:all": "yarn workspaces run test"
+    "test:all": "yarn workspaces run test",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",

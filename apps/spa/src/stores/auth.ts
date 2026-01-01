@@ -58,6 +58,7 @@ export const useAuth = defineStore(
 
     const logout = () => {
       setUser(null)
+      localStorage.removeItem('auth');
     }
 
     const getDecodedToken = () => {

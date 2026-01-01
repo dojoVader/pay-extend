@@ -131,7 +131,7 @@ router.beforeEach((to, from, next) => {
   try {
     const auth = useAuth()
     // primary check: localStorage token (explicit requirement), fallback to store
-    const lsToken = localStorage.getItem('auth_token')
+    const lsToken = localStorage.getItem('auth')
     const storeToken = auth?.user?.token
     const token = lsToken || storeToken
 
