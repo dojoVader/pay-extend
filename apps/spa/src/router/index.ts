@@ -56,6 +56,14 @@ const router = createRouter({
       },
       component: () => import('@/views/integrations/payment/stripe/index.vue')
     },
+    {
+      path: '/integrations/notification/smtp',
+      name: 'SMTP Settings',
+      meta: {
+        title: 'SMTP Settings'
+      },
+      component: () => import('@/views/integrations/payment/smtp/smtp.vue')
+    },
 
 
     // auth routes
@@ -139,7 +147,7 @@ router.beforeEach((to, from, next) => {
 
     // token exists — proceed
     return next()
-  } catch (err) {
+  } catch {
     // In case Pinia isn't ready or something fails, allow navigation to login
     return next({ path: '/auth/login', query: { redirect: to.fullPath } })
   }
