@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuth } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +55,14 @@ const router = createRouter({
         title: 'Stripe Settings'
       },
       component: () => import('@/views/integrations/payment/stripe/index.vue')
+    },
+    {
+      path: '/integrations/notification/smtp',
+      name: 'SMTP Settings',
+      meta: {
+        title: 'SMTP Settings'
+      },
+      component: () => import('@/views/integrations/payment/smtp/smtp.vue')
     },
 
 
@@ -115,6 +124,33 @@ const router = createRouter({
       component: () => import('@/views/auth/two-steps/index.vue')
     }
   ]
+})
+
+// Global navigation guard: ensure routes (except /auth/*) have an active auth token.
+router.beforeEach((to, from, next) => {
+  try {
+    const auth = useAuth()
+    // primary check: localStorage token (explicit requirement), fallback to store
+    const lsToken = localStorage.getItem('auth_token')
+    const storeToken = auth?.user?.token
+    const token = lsToken || storeToken
+
+    // allow access to auth routes (login/register/etc.) and public root
+    if (to.path.startsWith('/auth') || to.path === '/') {
+      return next()
+    }
+
+    // If there's no token, redirect to login and preserve intended path
+    if (!token) {
+      return next({ path: '/auth/login', query: { redirect: to.fullPath } })
+    }
+
+    // token exists — proceed
+    return next()
+  } catch {
+    // In case Pinia isn't ready or something fails, allow navigation to login
+    return next({ path: '/auth/login', query: { redirect: to.fullPath } })
+  }
 })
 
 export default router

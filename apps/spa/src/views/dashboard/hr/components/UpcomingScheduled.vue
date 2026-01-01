@@ -2,7 +2,7 @@
   <div class="col-span-1">
     <div class="card">
       <div class="card-header">
-        <h6 class="card-title">Upcoming Scheduled</h6>
+        <h6 class="card-title">Payment Logs</h6>
       </div>
 
       <div class="card-body">

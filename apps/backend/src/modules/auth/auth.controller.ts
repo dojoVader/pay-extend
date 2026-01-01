@@ -37,7 +37,7 @@ export class AuthController {
     @Body() body: LoginRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { access_token } = await this.authService.login(
+    const { access_token, name } = await this.authService.login(
       body.email,
       body.password,
     );
@@ -51,6 +51,7 @@ export class AuthController {
     return {
       message: 'Login successful',
       access_token,
+      name,
     };
   }
 }

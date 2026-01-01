@@ -14,8 +14,8 @@
             <span class="-top-1 -end-1 absolute w-2.5 h-2.5 bg-green-400 border-2 border-white rounded-full"></span>
           </div>
           <div>
-            <h6 class="mb-1 text-sm font-semibold text-default-800">Paula Keenan</h6>
-            <p class="text-default-500">CEO & Founder</p>
+            <h6 class="mb-1 text-sm font-semibold text-default-800">{{ name }}</h6>
+            <p class="text-default-500">{{role}}</p>
           </div>
         </RouterLink>
       </div>
@@ -48,4 +48,15 @@
 import { Icon } from '@iconify/vue'
 import avatar1 from '@/assets/images/user/avatar-1.png'
 import { RouterLink } from 'vue-router';
+import { ref } from "vue";
+import { useAuth } from "@/stores/auth.ts";
+
+const name = ref('');
+const role = ref('');
+const auth = useAuth();
+const decodedToken = auth.getUser();
+
+console.log(decodedToken);
+name.value = decodedToken?.user?.name || 'User';
+role.value = 'Admin';
 </script>

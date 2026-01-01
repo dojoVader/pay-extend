@@ -1,7 +1,7 @@
 <template>
-  <div class="card mb-5">
+  <div class="card mb-5 h-full">
     <div class="card-header">
-      <h6 class="card-title">Employee Performance</h6>
+      <h6 class="card-title">Event Log Viewer</h6>
       <div class="flex gap-3 items-center">
         <div class="relative">
           <input type="email" class="form-input form-input-sm ps-9" placeholder="Search for...." />

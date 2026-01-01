@@ -3,17 +3,14 @@
     <PageTitle title="Extension Dashboard" subtitle="Dashboards" />
     <HRWelcome />
     <div class="grid lg:grid-cols-2 grid-cols-1 gap-5 mb-5">
-      <SummaryCards />
       <ApplicationReceived />
+
+      <SummaryCards />
     </div>
     <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
       <div class="lg:col-span-3 col-span-1">
-        <EmployeePerformance />
-        <div class="grid lg:grid-cols-3 col-span-1 gap-5">
-          <TotalProjects />
-          <UpcomingInterview />
-          <RecentPayroll />
-        </div>
+        <EventLogViewer />
+
       </div>
       <UpcomingScheduled />
     </div>
@@ -26,7 +23,7 @@ import Vertical from '@/layouts/vertical.vue'
 import HRWelcome from './components/HRWelcome.vue'
 import SummaryCards from './components/SummaryCards.vue'
 import ApplicationReceived from './components/ApplicationReceived.vue'
-import EmployeePerformance from './components/EmployeePerformance.vue'
+import EventLogViewer from './components/EventLogViewer.vue'
 import TotalProjects from './components/TotalProjects.vue'
 import UpcomingInterview from './components/UpcomingInterview.vue'
 import RecentPayroll from './components/RecentPayroll.vue'
