@@ -35,6 +35,10 @@ export class ExtensionService {
       skip: offset,
     });
   }
+
+  async getAllExtensions(): Promise<ExtensionContext[]> {
+    return this.extensionRepository.find();
+  }
   /**
    * This method saves an extension to the PayExtend platform allowing the user
    * to add extensions to the platform
@@ -42,6 +46,7 @@ export class ExtensionService {
    * @returns
    */
   async create(data: ExtensionRequest) {
-    return this.extensionRepository.create(data);
+    const extension = this.extensionRepository.create(data);
+    return this.extensionRepository.save(extension);
   }
 }

@@ -129,24 +129,40 @@ async function authLogin(data: { email: string; password: string }) {
     },
     body: JSON.stringify(data)
   });
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw { status: res.status, message: errorData.message };
+  }
   return await res.json();
 }
 
 async function onSubmit() {
   if (!validateAll()) return
   loading.value = true
-  const res = await authLogin({ email: form.email, password: form.password })
-  loading.value = false
-  if (res.access_token) {
-    // navigate to dashboard or show success — for now just console
-    user.setUser({
-      name: res.name,
-      token: res.access_token,
-    })
-    await router.push('/dashboard/hr')
-  } else {
-    // set a generic form error on password for now
-    errors.password = res.message || 'Login failed'
+  try {
+    const res = await authLogin({ email: form.email, password: form.password })
+    if (res.access_token) {
+      // navigate to dashboard or show success — for now just console
+      user.setUser({
+        name: res.name,
+        token: res.access_token,
+      })
+      await router.push('/dashboard/hr')
+    } else {
+      // set a generic form error on password for now
+      errors.password = res.message || 'Login failed'
+    }
+  } catch (error: any) {
+    const message = error.message;
+    if (message == 'No installation found for this user.') {
+     errors.password = message + ' Redirecting to registration...';
+     setTimeout(async() => {
+       await router.push('/auth/register')
+     },3000)
+    } else {
+      errors.password = error.message || 'Login failed'
+    }
   }
+  loading.value = false
 }
 </script>

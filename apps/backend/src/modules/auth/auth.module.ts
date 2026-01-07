@@ -11,6 +11,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { JwtGuard } from "./guards/jwtauth.guard";
 import { APP_GUARD } from "@nestjs/core";
+import { Installation } from "../../dtos/entities/installation.entity";
 
 console.log(process.env.SECRET); // Ensure this is set in your environment
 
@@ -23,7 +24,7 @@ console.log(process.env.SECRET); // Ensure this is set in your environment
   ],
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Installation]),
     PassportModule.register({
       defaultStrategy: 'jwt',
       session: true,

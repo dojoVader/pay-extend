@@ -3,20 +3,23 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  UnauthorizedException, UseGuards
-} from "@nestjs/common";
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '../../dtos/entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { Installation } from '../../dtos/entities/installation.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Installation)
+    private installation: Repository<Installation>,
     private jwtService: JwtService,
     private config: ConfigService,
   ) {}
@@ -46,6 +49,18 @@ export class AuthService {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    // // Check if installation exists for the user
+    // const installation = await this.installation.findOneBy({
+    //   user_id: user.id,
+    // });
+    // if (!installation) {
+    //   throw new BadRequestException({
+    //     message:
+    //       'No installation found for this user.',
+    //   });
+    // }
+
     const payload = { email: user.email, sub: user.id, role: user.role };
     const accessToken = this.jwtService.sign(payload, {
       secret: this.config.get<string>('SECRET'),

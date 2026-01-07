@@ -43,23 +43,10 @@
               </div>
             </div>
           </div>
-          <div class="p-6">
-            <h5 class="font-semibold text-sm mb-3">Sidenav Color</h5>
-            <div class="flex gap-2">
-              <div v-for="(item, idx) in sidenavColorOptions" :key="idx">
-                <input :id="`sidenav-color-${item.color}`" class="hidden" type="radio" name="data-sidenav-color" :value="item.color" :checked="layout.sidenav.color === item.color" @change="() => setSideNavColor(item.color)" />
-                <label :for="`sidenav-color-${item.color}`" class="form-label btn bg-default-150">{{ toPascalCase(item.color) }}</label>
-              </div>
-            </div>
-          </div>
+
         </div>
       </simplebar>
-      <div class="p-4 flex border-t border-dashed border-default-900/10">
-        <div class="flex w-full gap-4">
-          <button type="button" class="btn bg-default-150 grow" id="reset-layout" @click="reset">Reset</button>
-          <RouterLink to="https://1.envato.market/tailwick-tailwind" target="_blank" class="btn bg-primary text-white grow">Buy Now</RouterLink>
-        </div>
-      </div>
+
     </div>
   </div>
 </template>
