@@ -49,7 +49,7 @@ const router = createRouter({
       component: () => import('@/views/integrations/modules/index.vue')
     },
     {
-      path: '/integrations/modules/stripe',
+      path: '/integrations/payment/stripe',
       name: 'Stripe',
       meta: {
         title: 'Stripe Settings'
@@ -63,6 +63,14 @@ const router = createRouter({
         title: 'SMTP Settings'
       },
       component: () => import('@/views/integrations/modules/smtp/smtp.vue')
+    },
+    {
+      path: '/integrations/extension/chrome-webstore',
+      name: 'Chrome Webstore Settings',
+      meta: {
+        title: 'Chrome Webstore Settings'
+      },
+      component: () => import('@/views/integrations/modules/chrome-webstore/index.vue')
     },
 
 

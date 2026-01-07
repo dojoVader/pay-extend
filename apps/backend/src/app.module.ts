@@ -10,6 +10,8 @@ import { ExtensionContext } from './dtos/entities/extension.entity';
 import { DomSelector } from './dtos/entities/domselectors.entity';
 import { Notification } from './dtos/entities/notifications.entity';
 import { NotificationModule } from './modules/notifications/notification.module';
+import { ChromeWebstoreModule } from './modules/chrome-webstore/chrome-webstore.module';
+import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
 
 @Module({
   providers: [],
@@ -30,6 +32,7 @@ import { NotificationModule } from './modules/notifications/notification.module'
         ExtensionContext,
         DomSelector,
         Notification,
+        ConfigurationSettings,
       ],
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
       synchronize: true,
@@ -51,6 +54,7 @@ import { NotificationModule } from './modules/notifications/notification.module'
     AuthModule,
     ExtensionContextModule,
     NotificationModule,
+    ChromeWebstoreModule,
   ],
 })
 export class AppModule {}
