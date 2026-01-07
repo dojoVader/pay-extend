@@ -46,15 +46,15 @@ const router = createRouter({
       meta: {
         title: 'Payment Integrations'
       },
-      component: () => import('@/views/integrations/payment/index.vue')
+      component: () => import('@/views/integrations/modules/index.vue')
     },
     {
-      path: '/integrations/payment/stripe',
+      path: '/integrations/modules/stripe',
       name: 'Stripe',
       meta: {
         title: 'Stripe Settings'
       },
-      component: () => import('@/views/integrations/payment/stripe/index.vue')
+      component: () => import('@/views/integrations/modules/stripe/index.vue')
     },
     {
       path: '/integrations/notification/smtp',
@@ -62,7 +62,7 @@ const router = createRouter({
       meta: {
         title: 'SMTP Settings'
       },
-      component: () => import('@/views/integrations/payment/smtp/smtp.vue')
+      component: () => import('@/views/integrations/modules/smtp/smtp.vue')
     },
 
 

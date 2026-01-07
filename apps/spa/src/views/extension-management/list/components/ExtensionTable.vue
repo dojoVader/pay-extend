@@ -120,57 +120,6 @@ interface ExtensionContextRow {
 }
 
 const extensions: ExtensionContextRow[] = [
-  {
-    id: 1,
-    extensionItemId: 'store-abc-001',
-    extensionName: 'Fraud Shield',
-    extensionDescription: 'Real-time fraud detection and risk scoring for payments.',
-    status: 'approved',
-    publicKey: 'pk_live_7f3b...a9d2',
-    extensionLogo: 'https://dummyimage.com/80x80/efefef/aaa.png&text=FS',
-    createdAt: '2025-10-05 14:22',
-    updatedAt: '2025-11-12 09:10',
-    active: true,
-    variant: 'bg-success/10 text-success'
-  },
-  {
-    id: 2,
-    extensionItemId: 'store-xyz-902',
-    extensionName: 'Tax Calculator',
-    extensionDescription: 'Calculates regional taxes and applies them at checkout.',
-    status: 'pending',
-    publicKey: 'pk_test_9de1...22ff',
-    extensionLogo: 'https://dummyimage.com/80x80/efefef/aaa.png&text=TX',
-    createdAt: '2025-09-21 08:01',
-    updatedAt: '2025-10-01 12:45',
-    active: true,
-    variant: 'bg-default-200 text-default-600'
-  },
-  {
-    id: 3,
-    extensionItemId: 'store-qwe-777',
-    extensionName: 'Legacy Exporter',
-    extensionDescription: 'Exports transactions to legacy ERP in CSV format.',
-    status: 'disabled',
-    publicKey: 'pk_live_11aa...bb33',
-    extensionLogo: 'https://dummyimage.com/80x80/efefef/aaa.png&text=LE',
-    createdAt: '2025-06-10 10:00',
-    updatedAt: '2025-11-30 16:30',
-    active: false,
-    variant: 'bg-default-200 text-default-600'
-  },
-  {
-    id: 4,
-    extensionItemId: 'store-rej-404',
-    extensionName: 'Ad Injector',
-    extensionDescription: 'Injects ads into receipts (rejected for policy violations).',
-    status: 'rejected',
-    publicKey: 'pk_live_dead...beef',
-    extensionLogo: 'https://dummyimage.com/80x80/efefef/aaa.png&text=AI',
-    createdAt: '2025-03-11 11:11',
-    updatedAt: '2025-03-20 14:33',
-    active: false,
-    variant: 'bg-danger/10 text-danger'
-  }
+
 ]
 </script>

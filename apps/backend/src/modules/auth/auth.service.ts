@@ -50,16 +50,16 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Check if installation exists for the user
-    const installation = await this.installation.findOneBy({
-      user_id: user.id,
-    });
-    if (!installation) {
-      throw new BadRequestException({
-        message:
-          'No installation found for this user.',
-      });
-    }
+    // // Check if installation exists for the user
+    // const installation = await this.installation.findOneBy({
+    //   user_id: user.id,
+    // });
+    // if (!installation) {
+    //   throw new BadRequestException({
+    //     message:
+    //       'No installation found for this user.',
+    //   });
+    // }
 
     const payload = { email: user.email, sub: user.id, role: user.role };
     const accessToken = this.jwtService.sign(payload, {

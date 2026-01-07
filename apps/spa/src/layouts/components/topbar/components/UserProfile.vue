@@ -5,7 +5,6 @@
     </button>
     <div class="hs-dropdown-menu min-w-48" role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-with-icons">
       <div class="p-2">
-        <h6 class="mb-2 text-default-500">Welcome to Tailwick</h6>
         <RouterLink to="" class="flex gap-3">
           <div class="relative inline-block">
             <div class="rounded bg-default-200">
@@ -21,19 +20,6 @@
       </div>
       <div class="border-t border-t-default-200 -mx-2 my-2"></div>
       <div class="flex flex-col gap-y-1">
-        <RouterLink class="flex items-center gap-x-3.5 py-1.5 font-medium px-3 text-default-600 hover:bg-default-150 rounded" to="/apps/email">
-          <Icon icon="lucide:mail" class="size-4"></Icon>
-          Inbox
-          <span class="size-4.5 font-semibold bg-danger rounded text-white flex items-center justify-center text-xs">15</span>
-        </RouterLink>
-        <RouterLink class="flex items-center gap-x-3.5 py-1.5 font-medium px-3 text-default-600 hover:bg-default-150 rounded" to="/apps/chat">
-          <Icon icon="lucide:messages-square" class="size-4"></Icon>
-          Chat
-        </RouterLink>
-        <RouterLink class="flex items-center gap-x-3.5 py-1.5 font-medium px-3 text-default-600 hover:bg-default-150 rounded" to="/pricing">
-          <Icon icon="lucide:gem" class="size-4"></Icon>
-          Upgrade Pro
-        </RouterLink>
         <div class="border-t border-default-200 -mx-2 my-1"></div>
         <RouterLink class="flex items-center gap-x-3.5 py-1.5 font-medium px-3 text-default-600 hover:bg-default-150 rounded" @click="auth.logout()" to="/auth/login" >
           <Icon icon="lucide:log-out" class="size-4"></Icon>

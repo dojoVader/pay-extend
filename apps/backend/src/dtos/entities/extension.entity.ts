@@ -28,10 +28,6 @@ export class ExtensionContext {
   @IsString()
   publicKey: string;
 
-  @IsString()
-  @Column({ name: 'extension_logo' })
-  extensionLogo: string;
-
   @IsDate()
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

@@ -4,10 +4,12 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExtensionContextModule } from './modules/extension-context/extension-context.module';
-import { Installation } from "./dtos/entities/installation.entity";
-import { User } from "./dtos/entities/user.entity";
-import { ExtensionContext } from "./dtos/entities/extension.entity";
-import { DomSelector } from "./dtos/entities/domselectors.entity";
+import { Installation } from './dtos/entities/installation.entity';
+import { User } from './dtos/entities/user.entity';
+import { ExtensionContext } from './dtos/entities/extension.entity';
+import { DomSelector } from './dtos/entities/domselectors.entity';
+import { Notification } from './dtos/entities/notifications.entity';
+import { NotificationModule } from './modules/notifications/notification.module';
 
 @Module({
   providers: [],
@@ -22,7 +24,13 @@ import { DomSelector } from "./dtos/entities/domselectors.entity";
       username: process.env.DB_USERNAME || 'payextend',
       password: process.env.DB_PASSWORD || 'password',
       database: process.env.DB_NAME || 'payextend',
-      entities: [Installation, User,ExtensionContext, DomSelector],
+      entities: [
+        Installation,
+        User,
+        ExtensionContext,
+        DomSelector,
+        Notification,
+      ],
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
       synchronize: true,
       logging: false,
@@ -42,6 +50,7 @@ import { DomSelector } from "./dtos/entities/domselectors.entity";
     }),
     AuthModule,
     ExtensionContextModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}

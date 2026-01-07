@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { fetchWithAuth } from '@/helpers/fetchWithAuth'
 
 type ExtensionForm = {
   extensionItemId: string
@@ -14,6 +15,7 @@ type ExtensionForm = {
 const emit = defineEmits<{
   (e: 'save', payload: ExtensionForm): void
   (e: 'cancel'): void
+  (e: 'success'): void
 }>()
 
 const form = reactive<ExtensionForm>({
@@ -37,6 +39,8 @@ const errors = reactive<Record<keyof ExtensionForm, string | null>>({
   extensionLogo: null,
   active: null,
 })
+
+const isSubmitting = ref(false)
 
 function validate(): boolean {
   let ok = true
@@ -64,9 +68,29 @@ function resetForm() {
   Object.keys(errors).forEach(k => (errors[k as keyof ExtensionForm] = null))
 }
 
-function handleSubmit() {
+async function handleSubmit(e) {
+  e.preventDefault();
+  e.stopPropagation();
   if (!validate()) return
-  emit('save', { ...form })
+  isSubmitting.value = true
+  try {
+    const response = await fetchWithAuth('/api/extension/add', {
+      method: 'POST',
+      body: JSON.stringify(form),
+    })
+    if (response.ok) {
+      emit('success')
+      resetForm()
+    } else {
+      // Handle error, maybe show a message
+      console.error('Failed to add extension')
+    }
+  } catch (error) {
+    console.error('Error adding extension:', error)
+    emit('error', error)
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 function handleCancel() {
@@ -108,9 +132,10 @@ function handleCancel() {
 
           <div>
             <label class="inline-block mb-2 text-sm text-default-800 font-medium">Description</label>
-            <textarea v-model="form.extensionDescription" rows="3" class="form-input" placeholder="Describe what this extension does"></textarea>
+            <textarea maxlength="255" v-model="form.extensionDescription" rows="3" class="form-input" placeholder="Describe what this extension does"></textarea>
             <p class="mt-1 text-default-400 text-xs">Brief summary of the extension’s purpose and key capabilities.</p>
             <p v-if="errors.extensionDescription" class="text-danger text-xs mt-1">{{ errors.extensionDescription }}</p>
+            <span>{{ form.extensionDescription.length }}/255</span>
           </div>
 
           <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
@@ -121,30 +146,12 @@ function handleCancel() {
               </select>
               <p class="mt-1 text-default-400 text-xs">Lifecycle state: Pending, Published, Rejected, or Disabled.</p>
             </div>
-            <div class="col-span-1">
-              <label class="inline-block mb-2 text-sm text-default-800 font-medium">Public Key</label>
-              <input v-model="form.publicKey" type="text" class="form-input" placeholder="Public key (optional)" />
-              <p class="mt-1 text-default-400 text-xs">Public key for signature verification. Leave empty if not applicable.</p>
-            </div>
-          </div>
 
-          <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
-            <div class="col-span-1">
-              <label class="inline-block mb-2 text-sm text-default-800 font-medium">Extension Logo URL</label>
-              <input v-model="form.extensionLogo" type="url" class="form-input" placeholder="https://..." />
-              <p class="mt-1 text-default-400 text-xs">HTTPS URL to a square logo image (e.g., 512×512px).</p>
-            </div>
-            <div class="col-span-1 flex items-center gap-3 pt-7">
-              <input id="activeSwitch" v-model="form.active" type="checkbox" class="form-switch" />
-              <label for="activeSwitch" class="text-sm text-default-800">Active</label>
-
-            </div>
-            <p class="col-span-1 lg:col-start-2 mt-1 text-default-400 text-xs">Toggle to enable or disable this extension for use.</p>
           </div>
 
           <div class="flex items-center justify-end gap-2 pt-2">
             <button type="button" class="btn bg-transparent border border-default-200 text-default-700" data-hs-overlay="#drawerEnd" @click="handleCancel">Cancel</button>
-            <button type="submit" class="btn bg-primary text-white" data-hs-overlay="#drawerEnd">Save</button>
+            <button type="submit" class="btn bg-primary text-white"  :disabled="isSubmitting">Save</button>
           </div>
         </form>
       </div>

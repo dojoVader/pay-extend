@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
 export class ExtensionRequest {
   @IsString()
   @IsNotEmpty()
@@ -13,11 +13,18 @@ export class ExtensionRequest {
   extensionDescription: string;
 
   @IsString()
+  @IsOptional()
   status: string;
 
   @IsString()
+  @IsOptional()
   publicKey: string;
 
   @IsString()
+  @IsOptional()
   extensionLogo: string;
+
+  @IsBoolean()
+  @IsOptional()
+  active: boolean;
 }

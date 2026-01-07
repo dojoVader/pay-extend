@@ -49,7 +49,7 @@ export async function fetchWithAuth(input: RequestInfo, init?: RequestInit) {
         window.location.href = `/auth/login?redirect=${encodeURIComponent(redirect)}`
       }
     } catch (e) {
-      // fallback
+      // fallback for the
       try {
         const redirect = typeof window !== 'undefined' ? window.location.pathname + window.location.search : ''
         window.location.href = `/auth/login?redirect=${encodeURIComponent(redirect)}`
