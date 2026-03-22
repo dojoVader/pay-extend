@@ -12,13 +12,15 @@ export default defineConfig({
     },
   },
   server: {
+    watch: {
+      usePolling: true,
+      interval: 1000, // Optional: polling interval in milliseconds
+    },
     host: '0.0.0.0',
-    port: 9091,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-      },
+    hmr: {
+      host: 'localhost', // Connect from the browser to localhost on the host machine
+      port: 5173, // Default Vite port
+      clientPort: 5173,
     },
   },
   build: {

@@ -16,7 +16,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
+    "start:debug": "nest start --debug 0.0.0.0:9229",
     "start:prod": "node dist/main",
     "start:dashboard": "yarn workspace vue-dashboard dev",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

@@ -106,7 +106,7 @@ onMounted(async () => {
   try {
     const res = await fetch(`${PAYEXTEND_BASE_URL}auth/verify`, {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'same-origin',
     })
     if (!res.ok) {
       auth.logout()

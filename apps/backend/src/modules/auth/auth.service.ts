@@ -69,12 +69,20 @@ export class AuthService {
     });
     // Set HTTP-only, same-site cookie
     res.cookie('jwt', accessToken, {
-      httpOnly: false, // Prevents client-side JavaScript access
-      secure: false, // Use secure in production
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'none',
+      httpOnly: true, // Prevents client-side JavaScript access
+      secure: true, // Use secure in production
+      sameSite: 'strict',
       maxAge: 1000 * 60 * 60, // 1 hour
       path: '/', // Accessible across the app
     });
+
+    console.log({
+      httpOnly: true, // Prevents client-side JavaScript access
+      secure: true, // Use secure in production
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60, // 1 hour
+      path: '/', // Accessible across the app
+    })
 
     return {
       access_token: accessToken,

@@ -47,12 +47,13 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @Req() req: Request,
   ) {
-    console.log(req.cookies);
+
     const { access_token, name } = await this.authService.login(
       body.email,
       body.password,
       res,
     );
+    console.log(req.cookies);
     return {
       message: 'Login successful',
       access_token,
