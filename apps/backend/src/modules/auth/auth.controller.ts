@@ -1,16 +1,20 @@
 import {
   Controller,
   Post,
+  Get,
   Body,
   Header,
   HttpException,
   HttpStatus,
   Res,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { LoginRequest } from '../../dtos/requests/login.request';
 import { RegisterRequest } from '../../dtos/requests/register.request';
+import { JwtGuard } from './guards/jwtauth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +25,12 @@ export class AuthController {
   @Header('Content-Type', 'application/json')
   async register(@Body() body: RegisterRequest) {
     if (body?.email && body?.password) {
-      return this.authService.register(body.email, body.password);
+      return this.authService.register(
+        body.email,
+        body.password,
+        body.role,
+        body.name,
+      );
     } else {
       throw new HttpException(
         'All fields are required',
@@ -36,22 +45,24 @@ export class AuthController {
   async login(
     @Body() body: LoginRequest,
     @Res({ passthrough: true }) res: Response,
+    @Req() req: Request,
   ) {
+    console.log(req.cookies);
     const { access_token, name } = await this.authService.login(
       body.email,
       body.password,
+      res,
     );
-    res.cookie('jwt', access_token, {
-      httpOnly: true, // Prevents client-side JavaScript access
-      secure: process.env.NODE_ENV === 'production', // Use secure in production
-      sameSite: 'strict', // CSRF protection
-      maxAge: 1000 * 60 * 60, // 1 hour
-      path: '/', // Accessible across the app
-    });
     return {
       message: 'Login successful',
       access_token,
       name,
     };
+  }
+
+  @Get('verify')
+  @UseGuards(JwtGuard)
+  verify(@Req() req: Request) {
+    return req.user;
   }
 }

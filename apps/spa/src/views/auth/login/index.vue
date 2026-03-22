@@ -1,168 +1,157 @@
 <template>
-  <Auth>
-    <div class="mt-8 text-center">
-      <h4 class="mb-2.5 text-xl font-semibold text-primary">Welcome Back !</h4>
-      <p class="text-base text-default-500">Sign in to continue to Payextend.</p>
+  <div class="min-h-screen flex bg-gray-50">
+    <!-- Left decorative panel -->
+    <div class="hidden lg:flex lg:w-1/2 bg-indigo-600 items-center justify-center p-12 flex-col gap-8">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+          <Icon icon="lucide:puzzle" class="text-white text-xl" />
+        </div>
+        <span class="text-white text-2xl font-bold">PayExtend</span>
+      </div>
+      <div class="max-w-sm text-center">
+        <h2 class="text-3xl font-bold text-white leading-tight mb-4">Browser extension monetisation, simplified.</h2>
+        <p class="text-indigo-200 text-sm leading-relaxed">Manage extensions, track DOM selectors, and integrate payment gateways — all from one dashboard.</p>
+      </div>
+      <!-- Feature pills -->
+      <div class="flex flex-wrap gap-2 justify-center">
+        <span v-for="feat in features" :key="feat" class="px-3 py-1.5 bg-white/10 text-white text-xs rounded-full">{{ feat }}</span>
+      </div>
     </div>
-    <form @submit.prevent="onSubmit" class="text-left w-full mt-10">
-      <div class="mb-4">
-        <label for="email" class="block font-medium text-default-900 text-sm mb-2">Username/ Email ID</label>
-        <input
-          v-model="form.email"
-          @input="onChange('email')"
-          type="text"
-          id="email"
-          class="form-input"
-          :class="errors.email ? 'border border-red-400' : ''"
-          placeholder="Enter Username or email"
-          style="padding: 0 12px"
-        />
-        <p v-if="errors.email" class="text-sm text-red-500 mt-1">{{ errors.email }}</p>
-      </div>
-      <div class="mb-4">
-        <RouterLink to="/auth/reset-pass" class="text-primary font-medium text-sm mb-2 float-end">Forgot Password ?</RouterLink>
-        <label for="Password" class="block font-medium text-default-900 text-sm mb-2">Password</label>
-        <input
-          v-model="form.password"
-          @input="onChange('password')"
-          type="password"
-          id="Password"
-          class="form-input"
-          :class="errors.password ? 'border border-red-400' : ''"
-          placeholder="Enter Password"
-          style="padding: 0 12px"
-        />
-        <p v-if="errors.password" class="text-sm text-red-500 mt-1">{{ errors.password }}</p>
-      </div>
-      <div class="flex items-center gap-2 mb-4">
-        <input id="checkbox-1" type="checkbox" class="form-checkbox" />
-        <label class="text-default-900 text-sm font-medium" for="checkbox-1">Remember Me</label>
-      </div>
-      <div class="mt-10 text-center">
-        <button type="submit" class="btn bg-primary text-white w-full" :disabled="loading">{{ loading ? 'Signing...' : 'Sign In' }}</button>
-      </div>
-<!--      <div class="flex w-full justify-center items-center gap-2">-->
-<!--        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">-->
-<!--          <Icon icon="logos:google-icon" class="iconify-color"></Icon>-->
-<!--          Use Google-->
-<!--        </RouterLink>-->
-<!--        <RouterLink to="" class="btn border border-default-200 flex-grow hover:bg-default-150 shadow-sm hover:text-default-800">-->
-<!--          <Icon icon="logos:apple" class="iconify text-mono"></Icon>-->
-<!--          Use Apple-->
-<!--        </RouterLink>-->
-<!--      </div>-->
-      <div class="mt-10 text-center">
-        <p class="text-base text-default-500">
-          Don't have an Account ?
-          <RouterLink to="/auth/register" class="font-semibold underline hover:text-primary transition duration-200">SignUp</RouterLink>
+
+    <!-- Right login form -->
+    <div class="flex-1 flex items-center justify-center p-8">
+      <div class="w-full max-w-sm">
+        <!-- Mobile logo -->
+        <div class="flex items-center gap-2 mb-8 lg:hidden">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+            <Icon icon="lucide:puzzle" class="text-white text-sm" />
+          </div>
+          <span class="text-gray-900 font-bold">PayExtend</span>
+        </div>
+
+        <h1 class="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
+        <p class="text-sm text-gray-500 mb-8">Sign in to your PayExtend account</p>
+
+        <p v-if="globalError" class="mb-4 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-center gap-2">
+          <Icon icon="lucide:alert-circle" class="text-sm flex-shrink-0" />
+          {{ globalError }}
+        </p>
+
+        <form @submit.prevent="onSubmit" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Email address</label>
+            <input
+              v-model="form.email"
+              @input="onChange('email')"
+              type="text"
+              placeholder="you@example.com"
+              class="form-input"
+              :class="errors.email ? 'border-red-400 focus:border-red-400' : ''"
+              autocomplete="email"
+            />
+            <p v-if="errors.email" class="text-xs text-red-500 mt-1">{{ errors.email }}</p>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-xs font-medium text-gray-700">Password</label>
+              <a href="#" class="text-xs text-indigo-600 hover:text-indigo-700">Forgot password?</a>
+            </div>
+            <div class="relative">
+              <input
+                v-model="form.password"
+                @input="onChange('password')"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="••••••••"
+                class="form-input pr-10"
+                :class="errors.password ? 'border-red-400 focus:border-red-400' : ''"
+                autocomplete="current-password"
+              />
+              <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600">
+                <Icon :icon="showPassword ? 'lucide:eye-off' : 'lucide:eye'" class="text-sm" />
+              </button>
+            </div>
+            <p v-if="errors.password" class="text-xs text-red-500 mt-1">{{ errors.password }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="remember" v-model="rememberMe" class="w-4 h-4 rounded border-gray-300 text-indigo-600" />
+            <label for="remember" class="text-sm text-gray-600">Remember me</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full" :disabled="loading">
+            <Icon v-if="loading" icon="lucide:loader-2" class="text-sm animate-spin" />
+            {{ loading ? 'Signing in...' : 'Sign in' }}
+          </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-500">
+          Don't have an account?
+          <RouterLink to="/auth/register" class="text-indigo-600 hover:text-indigo-700 font-medium">Create one</RouterLink>
         </p>
       </div>
-    </form>
-  </Auth>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { RouterLink, useRouter } from "vue-router";
-import Auth from "@/layouts/auth.vue";
-import { reactive, ref } from "vue";
-import { PAYEXTEND_ENDPOINTS, PayextendPath } from "@/helpers";
-import { useAuth } from "@/stores/auth.ts";
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Icon } from '@iconify/vue'
+import { useAuth } from '@/stores/auth'
 
-// auth User
-const user = useAuth();
-
-// form state
-const form = reactive({ email: '', password: '' })
-const errors = reactive<{ [k: string]: string | null }>({ email: null, password: null })
-const loading = ref(false)
+const user = useAuth()
 const router = useRouter()
 
-// validation regex
-const emailRegex = /^\S+@\S+\.\S+$/
-const passwordRegex = /^(?=.*\d).{8,}$/ // at least 8 chars and one number
+const form = reactive({ email: '', password: '' })
+const errors = reactive<{ email: string | null; password: string | null }>({ email: null, password: null })
+const loading = ref(false)
+const showPassword = ref(false)
+const rememberMe = ref(false)
+const globalError = ref('')
 
-function validateField(field: string) {
+const features = ['DOM Selectors', 'Extension Logs', 'Stripe Payments', 'Chrome Webstore', 'SMTP Alerts']
+
+const emailRegex = /^\S+@\S+\.\S+$/
+const passwordRegex = /^(?=.*\d).{8,}$/
+
+function validateField(field: 'email' | 'password') {
   if (field === 'email') {
-    if (!form.email) {
-      errors.email = 'Email is required'
-      return false
-    }
-    if (!emailRegex.test(form.email)) {
-      errors.email = 'Enter a valid email'
-      return false
-    }
-    errors.email = null
-    return true
+    if (!form.email) { errors.email = 'Email is required'; return false }
+    if (!emailRegex.test(form.email)) { errors.email = 'Enter a valid email'; return false }
+    errors.email = null; return true
   }
   if (field === 'password') {
-    if (!form.password) {
-      errors.password = 'Password is required'
-      return false
-    }
-    if (!passwordRegex.test(form.password)) {
-      errors.password = 'Password must be at least 8 characters and include a number'
-      return false
-    }
-    errors.password = null
-    return true
+    if (!form.password) { errors.password = 'Password is required'; return false }
+    if (!passwordRegex.test(form.password)) { errors.password = 'At least 8 characters including a number'; return false }
+    errors.password = null; return true
   }
   return true
 }
 
-function onChange(field: string) {
-  validateField(field)
-}
-
-function validateAll() {
-  const e1 = validateField('email')
-  const e2 = validateField('password')
-  return e1 && e2
-}
-
-// mock auth endpoint
-async function authLogin(data: { email: string; password: string }) {
-  const root = PayextendPath()
-  const res = await fetch(`${root}${PAYEXTEND_ENDPOINTS.LOGIN}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw { status: res.status, message: errorData.message };
-  }
-  return await res.json();
-}
+function onChange(field: 'email' | 'password') { validateField(field) }
 
 async function onSubmit() {
-  if (!validateAll()) return
+  const ok = validateField('email') && validateField('password')
+  if (!ok) return
   loading.value = true
+  globalError.value = ''
   try {
-    const res = await authLogin({ email: form.email, password: form.password })
-    if (res.access_token) {
-      // navigate to dashboard or show success — for now just console
-      user.setUser({
-        name: res.name,
-        token: res.access_token,
-      })
-      await router.push('/dashboard/hr')
-    } else {
-      // set a generic form error on password for now
-      errors.password = res.message || 'Login failed'
+    const data = await user.fetchUser(form.email, form.password)
+    if (data?.token) {
+      const redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard'
+      await router.push(redirect)
     }
-  } catch (error: any) {
-    const message = error.message;
-    if (message == 'No installation found for this user.') {
-     errors.password = message + ' Redirecting to registration...';
-     setTimeout(async() => {
-       await router.push('/auth/register')
-     },3000)
+  } catch (err: any) {
+    const msg = err?.message ?? 'Login failed'
+    if (msg.includes('No installation found')) {
+      globalError.value = msg + ' Redirecting to registration...'
+      setTimeout(() => router.push('/auth/register'), 3000)
     } else {
-      errors.password = error.message || 'Login failed'
+      globalError.value = msg
     }
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 </script>
