@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex bg-gray-50">
+  <div class="min-h-screen flex bg-gray-50 dark:bg-black">
     <!-- Left decorative panel -->
     <div class="hidden lg:flex lg:w-1/2 bg-indigo-600 items-center justify-center p-12 flex-col gap-8">
       <div class="flex items-center gap-3">
@@ -26,11 +26,11 @@
           <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
             <Icon icon="lucide:puzzle" class="text-white text-sm" />
           </div>
-          <span class="text-gray-900 font-bold">PayExtend</span>
+          <span class="text-gray-900 dark:text-white font-bold">PayExtend</span>
         </div>
 
-        <h1 class="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
-        <p class="text-sm text-gray-500 mb-8">Sign in to your PayExtend account</p>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Welcome back</h1>
+        <p class="text-sm text-gray-500 dark:text-neutral-400 mb-8">Sign in to your PayExtend account</p>
 
         <p v-if="globalError" class="mb-4 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-center gap-2">
           <Icon icon="lucide:alert-circle" class="text-sm flex-shrink-0" />
@@ -39,7 +39,7 @@
 
         <form @submit.prevent="onSubmit" class="space-y-4">
           <div>
-            <label class="block text-xs font-medium text-gray-700 mb-1">Email address</label>
+            <label class="block text-xs font-medium text-gray-700 dark:text-neutral-300 mb-1">Email address</label>
             <input
               v-model="form.email"
               @input="onChange('email')"
@@ -54,7 +54,7 @@
 
           <div>
             <div class="flex items-center justify-between mb-1">
-              <label class="text-xs font-medium text-gray-700">Password</label>
+              <label class="text-xs font-medium text-gray-700 dark:text-neutral-300">Password</label>
               <a href="#" class="text-xs text-indigo-600 hover:text-indigo-700">Forgot password?</a>
             </div>
             <div class="relative">
@@ -76,7 +76,7 @@
 
           <div class="flex items-center gap-2">
             <input type="checkbox" id="remember" v-model="rememberMe" class="w-4 h-4 rounded border-gray-300 text-indigo-600" />
-            <label for="remember" class="text-sm text-gray-600">Remember me</label>
+            <label for="remember" class="text-sm text-gray-600 dark:text-neutral-400">Remember me</label>
           </div>
 
           <button type="submit" class="btn btn-primary w-full" :disabled="loading">
@@ -85,7 +85,7 @@
           </button>
         </form>
 
-        <p class="mt-6 text-center text-sm text-gray-500">
+        <p class="mt-6 text-center text-sm text-gray-500 dark:text-neutral-400">
           Don't have an account?
           <RouterLink to="/auth/register" class="text-indigo-600 hover:text-indigo-700 font-medium">Create one</RouterLink>
         </p>

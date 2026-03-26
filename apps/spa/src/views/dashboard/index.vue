@@ -5,8 +5,8 @@
     <!-- KPI stat cards -->
     <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
       <div v-for="stat in stats" :key="stat.label" class="card p-4">
-        <p class="text-xs text-gray-400 mb-1 whitespace-nowrap">{{ stat.label }}</p>
-        <p class="text-xl font-bold text-gray-900 leading-tight">
+        <p class="text-xs text-gray-400 dark:text-neutral-500 mb-1 whitespace-nowrap">{{ stat.label }}</p>
+        <p class="text-xl font-bold text-gray-900 dark:text-white leading-tight">
           {{ stat.value }}
           <span v-if="stat.unit" class="text-sm font-normal text-gray-400 ml-0.5">{{ stat.unit }}</span>
         </p>
@@ -17,7 +17,7 @@
           >
             {{ stat.change >= 0 ? '↑' : '↓' }} {{ Math.abs(stat.change) }}%
           </span>
-          <span class="text-xs text-gray-400">vs last month</span>
+          <span class="text-xs text-gray-400 dark:text-neutral-500">vs last month</span>
         </div>
       </div>
     </div>
@@ -26,15 +26,15 @@
     <div class="card p-5 mb-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-sm font-semibold text-gray-900">Payment Behavior</h2>
-          <p class="text-xs text-gray-400 mt-0.5">Revenue, occupancy, vacancy and effective rent trends</p>
+          <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Payment Behavior</h2>
+          <p class="text-xs text-gray-400 dark:text-neutral-500 mt-0.5">Revenue, occupancy, vacancy and effective rent trends</p>
         </div>
         <div class="flex items-center gap-2">
           <button
             v-for="r in ['2 years', '5 years']"
             :key="r"
             class="px-3 py-1 text-xs rounded-md transition-colors"
-            :class="selectedRange === r ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:bg-gray-100'"
+            :class="selectedRange === r ? 'bg-indigo-600 text-white' : 'text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800'"
             @click="selectedRange = r"
           >{{ r }}</button>
         </div>
@@ -44,12 +44,12 @@
       <div class="flex flex-wrap gap-4 mb-4">
         <div v-for="series in chartLegend" :key="series.name" class="flex items-center gap-1.5">
           <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: series.color }" />
-          <span class="text-xs text-gray-500">{{ series.name }}</span>
+          <span class="text-xs text-gray-500 dark:text-neutral-400">{{ series.name }}</span>
         </div>
       </div>
 
       <!-- Chart placeholder -->
-      <div class="h-52 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center relative overflow-hidden">
+      <div class="h-52 rounded-lg bg-gray-50 dark:bg-neutral-950 border border-gray-100 dark:border-neutral-800 flex items-center justify-center relative overflow-hidden">
         <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 200">
           <!-- Revenue line -->
           <polyline points="0,160 100,140 200,120 300,100 400,80 500,60 600,50 700,40 800,30"
@@ -72,11 +72,11 @@
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
       <div v-for="chart in bottomCharts" :key="chart.title" class="card p-4">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="text-sm font-semibold text-gray-900">{{ chart.title }}</h3>
-          <button class="text-xs text-gray-400 hover:text-gray-600 transition-colors">2 years ›</button>
+          <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ chart.title }}</h3>
+          <button class="text-xs text-gray-400 dark:text-neutral-500 hover:text-gray-600 dark:hover:text-slate-300 transition-colors">2 years ›</button>
         </div>
         <!-- Mini chart placeholder -->
-        <div class="h-28 rounded-md bg-gray-50 flex items-end gap-0.5 px-2 py-2 overflow-hidden">
+        <div class="h-28 rounded-md bg-gray-50 dark:bg-neutral-950 flex items-end gap-0.5 px-2 py-2 overflow-hidden">
           <div
             v-for="(h, i) in chart.bars"
             :key="i"
@@ -84,7 +84,7 @@
             :style="{ height: h + '%', backgroundColor: chart.color + (h < 60 ? '66' : 'cc') }"
           />
         </div>
-        <p class="text-xs text-gray-400 mt-2">{{ chart.description }}</p>
+        <p class="text-xs text-gray-400 dark:text-neutral-500 mt-2">{{ chart.description }}</p>
       </div>
     </div>
   </AppLayout>
@@ -103,24 +103,24 @@ const auth = useAuth()
 const selectedRange = ref('2 years')
 
 onMounted(async () => {
-  try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}auth/verify`, {
-      method: 'GET',
-      credentials: 'same-origin',
-    })
-    if (!res.ok) {
-      auth.logout()
-      router.push('/auth/login')
-      return
-    }
-    const user = await res.json()
-    if (user?.email) {
-      auth.setUser({ name: user.name ?? user.email, token: auth.user?.token })
-    }
-  } catch {
-    auth.logout()
-    router.push('/auth/login')
-  }
+  // try {
+  //   const res = await fetch(`${PAYEXTEND_BASE_URL}auth/verify`, {
+  //     method: 'GET',
+  //     credentials: 'same-origin',
+  //   })
+  //   if (!res.ok) {
+  //     auth.logout()
+  //     router.push('/auth/login')
+  //     return
+  //   }
+  //   const user = await res.json()
+  //   if (user?.email) {
+  //     auth.setUser({ name: user.name ?? user.email, token: auth.user?.token })
+  //   }
+  // } catch {
+  //   auth.logout()
+  //   router.push('/auth/login')
+  // }
 })
 
 const stats = [

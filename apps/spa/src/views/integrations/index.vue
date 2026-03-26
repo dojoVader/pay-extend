@@ -38,7 +38,7 @@ const integrations = [
     description: 'Stripe integration using Payment Links for subscriptions and one-time payments.',
     href: '/integrations/payment/stripe',
     action: 'Setup',
-    icon: 'simple-icons:stripe',
+    icon: 'simple-icons:polar',
     iconBg: '#f5f3ff',
     iconColor: '#6366f1',
   },

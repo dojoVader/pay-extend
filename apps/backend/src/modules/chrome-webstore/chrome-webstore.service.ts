@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { OAuth2Client } from 'google-auth-library';
 import { firstValueFrom } from 'rxjs';
+import { ConfigurationSettings } from '../../dtos/entities/configuration.entity';
 
 @Injectable()
 export class ChromeWebstoreService {
@@ -11,6 +14,8 @@ export class ChromeWebstoreService {
   constructor(
     private config: ConfigService,
     private httpService: HttpService,
+    @InjectRepository(ConfigurationSettings)
+    private configRepo: Repository<ConfigurationSettings>,
   ) {
     this.oauth2Client = new OAuth2Client(
       this.config.get('CLIENT_ID'),
@@ -19,6 +24,21 @@ export class ChromeWebstoreService {
     this.oauth2Client.setCredentials({
       refresh_token: this.config.get('REFRESH_TOKEN'),
     });
+  }
+
+  async isCredentialSet(): Promise<boolean> {
+    const clientId = this.config.get<string>('CLIENT_ID');
+    const clientSecret = this.config.get<string>('CLIENT_SECRET');
+    const refreshToken = this.config.get<string>('REFRESH_TOKEN');
+    const publisherSetting = await this.configRepo.findOne({
+      where: { key: 'chrome:webstore:publisherID' },
+    });
+    return !!(
+      clientId &&
+      clientSecret &&
+      refreshToken &&
+      publisherSetting?.value
+    );
   }
 
   async getItemStatus(itemId: string) {

@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '@/stores/auth'
+import { createRouter, createWebHistory } from 'vue-router';
+import { useAuth } from '@/stores/auth';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,7 +33,7 @@ const router = createRouter({
     {
       path: '/integrations/payment/stripe',
       name: 'Stripe',
-      component: () => import('@/views/integrations/stripe/index.vue'),
+      component: () => import('@/views/integrations/polar/index.vue'),
     },
     {
       path: '/integrations/notification/smtp',
@@ -61,19 +61,6 @@ const router = createRouter({
       component: () => import('@/views/auth/logout/index.vue'),
     },
   ],
-})
+});
 
-router.beforeEach((to, _from, next) => {
-  try {
-    const auth = useAuth()
-    const lsToken = localStorage.getItem('auth')
-    const token = lsToken || auth?.user?.token
-    if (to.path.startsWith('/auth') || to.path === '/') return next()
-    if (!token) return next({ path: '/auth/login', query: { redirect: to.fullPath } })
-    return next()
-  } catch {
-    return next({ path: '/auth/login' })
-  }
-})
-
-export default router
+export default router;

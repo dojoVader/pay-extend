@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen overflow-hidden bg-gray-50">
+  <div class="flex h-screen overflow-hidden bg-gray-50 dark:bg-black">
     <Sidebar :collapsed="sidebarCollapsed" />
 
     <!-- Main area -->

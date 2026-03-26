@@ -11,7 +11,10 @@ import { DomSelector } from './dtos/entities/domselectors.entity';
 import { Notification } from './dtos/entities/notifications.entity';
 import { NotificationModule } from './modules/notifications/notification.module';
 import { ChromeWebstoreModule } from './modules/chrome-webstore/chrome-webstore.module';
+import { PolarModule } from './modules/polar/polar.module';
 import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
+import { PolarSettings } from './dtos/entities/polar-settings.entity';
+import { PolarPaymentRecord } from './dtos/entities/polar-payment-record.entity';
 
 @Module({
   providers: [],
@@ -33,6 +36,8 @@ import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
         DomSelector,
         Notification,
         ConfigurationSettings,
+        PolarSettings,
+        PolarPaymentRecord,
       ],
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
       synchronize: true,
@@ -55,6 +60,7 @@ import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
     ExtensionContextModule,
     NotificationModule,
     ChromeWebstoreModule,
+    PolarModule,
   ],
 })
 export class AppModule {}

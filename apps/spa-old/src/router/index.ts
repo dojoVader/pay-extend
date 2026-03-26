@@ -49,7 +49,7 @@ const router = createRouter({
       component: () => import('@/views/integrations/modules/index.vue')
     },
     {
-      path: '/integrations/payment/stripe',
+      path: '/integrations/payment/polar',
       name: 'Stripe',
       meta: {
         title: 'Stripe Settings'

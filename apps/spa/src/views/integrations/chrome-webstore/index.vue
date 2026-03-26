@@ -74,7 +74,7 @@
         </div>
         <div class="px-6 py-5">
           <label class="block text-xs font-medium text-gray-700 mb-1">Publisher ID</label>
-          <input type="text" v-model="config.publisherID" placeholder="Your Publisher ID" class="form-input" />
+          <input type="text" v-tooltip.top="'The Chrome Web Store Publisher ID is a unique alphanumeric identifier found in the Account section of the Chrome Web Store Developer Dashboard. '" v-model="config.publisherID" placeholder="Your Publisher ID" class="form-input" />
           <div class="flex items-center gap-3 mt-4">
             <button class="btn btn-primary btn-sm" @click="saveConfig">Save Settings</button>
           </div>
@@ -133,9 +133,26 @@ async function getConfig() {
   }
 }
 
-function saveConfig() {
-  localStorage.setItem('chrome_webstore_config', JSON.stringify(config))
-  saveMsg.value = 'Settings saved.'
-  setTimeout(() => (saveMsg.value = ''), 3000)
+async function saveConfig() {
+  try {
+    const response = await fetch(`${PAYEXTEND_BASE_URL}chrome-webstore/config`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(config),
+    })
+    const data = await response.json()
+    if (response.ok) {
+      saveMsg.value = data.message || 'Settings saved.'
+      setTimeout(() => (saveMsg.value = ''), 3000)
+      // Optionally refresh config
+      await getConfig()
+    } else {
+      errorCode.value = response.status
+    }
+  } catch (error) {
+    errorCode.value = 500
+  }
 }
 </script>

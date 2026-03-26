@@ -145,11 +145,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
-import { fetchWithAuth } from '@/helpers/fetchWithAuth'
+import { PAYEXTEND_BASE_URL } from '@/constant'
 
 interface Extension {
   id: number
@@ -161,12 +161,7 @@ interface Extension {
   createdAt: string
 }
 
-const items = ref<Extension[]>([
-  { id: 1, extensionItemId: 'ext-price-watch', extensionName: 'Price Watcher', extensionDescription: 'Monitors price changes on e-commerce sites', status: 'Published', active: true, createdAt: '2025-10-01' },
-  { id: 2, extensionItemId: 'ext-cart-tracker', extensionName: 'Cart Tracker', extensionDescription: 'Tracks cart abandonment events', status: 'Pending', active: true, createdAt: '2025-11-05' },
-  { id: 3, extensionItemId: 'ext-receipt-parser', extensionName: 'Receipt Parser', extensionDescription: 'Extracts data from digital receipts', status: 'Rejected', active: false, createdAt: '2025-09-15' },
-])
-
+const items = ref<Extension[]>([])
 const search = ref('')
 const statusFilter = ref('')
 const drawerOpen = ref(false)
@@ -196,6 +191,21 @@ const filtered = computed(() => {
     return matchSearch && matchStatus
   })
 })
+
+onMounted(() => {
+  fetchExtensions()
+})
+
+async function fetchExtensions() {
+  try {
+    const response = await fetch(`${PAYEXTEND_BASE_URL}extension`)
+    if (response.ok) {
+      items.value = await response.json()
+    }
+  } catch (e) {
+    console.error('Error fetching extensions:', e)
+  }
+}
 
 function statusBadge(status: string) {
   const map: Record<string, string> = {
@@ -227,10 +237,9 @@ async function handleSubmit() {
   if (!validate()) return
   isSubmitting.value = true
   try {
-    const response = await fetchWithAuth('/api/extension/add', { method: 'POST', body: JSON.stringify(form) })
+    const response = await fetch(`${PAYEXTEND_BASE_URL}extension/add`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
     if (response.ok) {
-      const now = new Date().toISOString().split('T')[0]
-      items.value.unshift({ id: Date.now(), ...form, createdAt: now })
+      await fetchExtensions()
       drawerOpen.value = false
       resetForm()
     }
