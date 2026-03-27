@@ -7,13 +7,11 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors({
-    origin: 'http://localhost:9091', // must match your frontend exactly (no trailing slash)
+    origin: 'http://localhost:5173', // must match your frontend exactly (no trailing slash)
     credentials: true, // ← this sends Access-Control-Allow-Credentials: true
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'], // add others if needed
   });
-
-
 
   await app.listen(process.env.PORT ?? 3000);
   // Set a Public folder for static assets

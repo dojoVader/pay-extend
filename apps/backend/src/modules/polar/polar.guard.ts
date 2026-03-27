@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChromeWebstoreService } from '../chrome-webstore/chrome-webstore.service';
-import { PolarSettings } from '../../dtos/entities/polar-settings.entity';
+import { PolarSettings } from '../../dtos/entities/polar/polar-settings.entity';
 
 @Injectable()
 export class PolarGuard implements CanActivate {

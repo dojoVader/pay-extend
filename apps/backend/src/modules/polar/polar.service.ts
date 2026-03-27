@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PolarSettings } from '../../dtos/entities/polar-settings.entity';
-import { PolarPaymentRecord } from '../../dtos/entities/polar-payment-record.entity';
+import { PolarSettings } from '../../dtos/entities/polar/polar-settings.entity';
+import { PolarPaymentRecord } from '../../dtos/entities/polar/polar-payment-record.entity';
 import { PolarSettingsRequest } from '../../dtos/requests/polar-settings.request';
+import { PolarExtensionMapping } from "../../dtos/entities/polar/polar_extension_mappings";
 
 @Injectable()
 export class PolarService {
@@ -12,6 +13,8 @@ export class PolarService {
   constructor(
     @InjectRepository(PolarSettings)
     private readonly settingsRepo: Repository<PolarSettings>,
+    @InjectRepository(PolarExtensionMapping)
+    private readonly polarMappingsRepo: Repository<PolarExtensionMapping>,
     @InjectRepository(PolarPaymentRecord)
     private readonly paymentRecordRepo: Repository<PolarPaymentRecord>,
   ) {}
@@ -57,5 +60,29 @@ export class PolarService {
 
   async getPaymentRecords(): Promise<PolarPaymentRecord[]> {
     return this.paymentRecordRepo.find({ order: { createdAt: 'DESC' } });
+  }
+
+  async createMapping(
+    extensionId: number,
+    data: Partial<Pick<PolarExtensionMapping, 'productId' | 'discountId' | 'checkSessionId' | 'subscriptionId'>>,
+  ): Promise<PolarExtensionMapping> {
+    const mapping = this.polarMappingsRepo.create({ extensionId, ...data });
+    return this.polarMappingsRepo.save(mapping);
+  }
+
+  async updateMapping(
+    id: number,
+    data: Partial<Pick<PolarExtensionMapping, 'productId' | 'discountId' | 'checkSessionId' | 'subscriptionId'>>,
+  ): Promise<PolarExtensionMapping> {
+    const mapping = await this.polarMappingsRepo.findOneBy({ id });
+    if (!mapping) {
+      throw new NotFoundException(`Polar mapping with id ${id} not found`);
+    }
+    Object.assign(mapping, data);
+    return this.polarMappingsRepo.save(mapping);
+  }
+
+  async getMappingByExtensionId(extensionId: number): Promise<PolarExtensionMapping | null> {
+    return this.polarMappingsRepo.findOneBy({ extensionId });
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
 import { ExtensionService } from './extension.service';
 import { ExtensionRequest } from '../../dtos/requests/extension.request';
 
@@ -14,6 +14,11 @@ export class ExtensionController {
   @Get('all')
   async getAllExtensions() {
     return this.extensionService.getAllExtensions();
+  }
+
+  @Get(':id')
+  async getExtensionById(@Param('id') id: string) {
+    return this.extensionService.getExtensionById(id);
   }
 
   @Post('add')

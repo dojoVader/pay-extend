@@ -52,13 +52,13 @@ export class ChromeWebstoreService {
     itemId: string,
   ): Promise<ChromeWebstoreFetchStatusResponse> {
     try {
-      this.publisherID = await this.configRepo.findOne({
+      const publisherId: ConfigurationSettings = await this.configRepo.findOne({
         where: { key: 'chrome:webstore:publisherID' },
       });
       const { token } = await this.oauth2Client.getAccessToken();
       const response = await firstValueFrom(
         this.httpService.get(
-          `https://chromewebstore.googleapis.com/v2/publishers/${this.publisherID.value}/items/${itemId}:fetchStatus`,
+          `https://chromewebstore.googleapis.com/v2/publishers/${publisherId.value}/items/${itemId}:fetchStatus`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

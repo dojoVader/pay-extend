@@ -12,9 +12,10 @@ import { Notification } from './dtos/entities/notifications.entity';
 import { NotificationModule } from './modules/notifications/notification.module';
 import { ChromeWebstoreModule } from './modules/chrome-webstore/chrome-webstore.module';
 import { PolarModule } from './modules/polar/polar.module';
-import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
-import { PolarSettings } from './dtos/entities/polar-settings.entity';
-import { PolarPaymentRecord } from './dtos/entities/polar-payment-record.entity';
+import { ConfigurationSettings } from './dtos/entities/configuration.entity';
+import { PolarSettings } from './dtos/entities/polar/polar-settings.entity';
+import { PolarPaymentRecord } from './dtos/entities/polar/polar-payment-record.entity';
+import { PolarExtensionMapping } from './dtos/entities/polar/polar_extension_mappings';
 
 @Module({
   providers: [],
@@ -38,6 +39,7 @@ import { PolarPaymentRecord } from './dtos/entities/polar-payment-record.entity'
         ConfigurationSettings,
         PolarSettings,
         PolarPaymentRecord,
+        PolarExtensionMapping,
       ],
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
       synchronize: true,

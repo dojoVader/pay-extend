@@ -22,11 +22,10 @@ app.use(PrimeVue, {
     preset: Aura,
     options: {
       prefix: 'p',
-      darkModeSelector: '.dark'
+      darkModeSelector: '.dark',
     },
   },
 });
-
 
 app.directive('tooltip', Tooltip);
 app.use(ToastService);

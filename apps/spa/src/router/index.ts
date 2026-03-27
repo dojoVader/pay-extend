@@ -16,6 +16,11 @@ const router = createRouter({
       component: () => import('@/views/extension-management/index.vue'),
     },
     {
+      path: '/extension/item/:id',
+      name: 'Extension Item',
+      component: () => import('@/views/extension-item/index.vue'),
+    },
+    {
       path: '/extension/dom-selector',
       name: 'DOM Selectors',
       component: () => import('@/views/dom-selectors/index.vue'),
