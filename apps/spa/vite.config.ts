@@ -17,10 +17,17 @@ export default defineConfig({
       interval: 1000, // Optional: polling interval in milliseconds
     },
     host: '0.0.0.0',
+    port: 5173,
     hmr: {
-      host: 'localhost', // Connect from the browser to localhost on the host machine
-      port: 5173, // Default Vite port
+      host: 'localhost',
+      port: 5173,
       clientPort: 5173,
+    },
+    proxy: {
+      '/api': {
+        target: 'http://backend:3000',
+        changeOrigin: true,
+      },
     },
   },
   build: {

@@ -59,9 +59,7 @@
               </td>
               <td class="text-xs text-gray-400">{{ item.updatedAt }}</td>
               <td>
-                <button class="btn-icon btn-ghost text-gray-400">
-                  <Icon icon="lucide:ellipsis" class="text-sm" />
-                </button>
+                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle($event, item)" aria-haspopup="true" aria-controls="overlay_menu" class="btn-icon btn-ghost text-gray-400" />
               </td>
             </tr>
             <tr v-if="filtered.length === 0">
@@ -75,6 +73,8 @@
       </div>
     </div>
 
+    <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true" />
+
     <!-- Drawer -->
     <Teleport to="body">
       <Transition name="fade">
@@ -83,7 +83,7 @@
       <Transition name="slide">
         <div v-if="drawerOpen" class="drawer-panel">
           <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h3 class="font-semibold text-gray-900 text-sm">Add DOM Selector</h3>
+            <h3 class="font-semibold text-gray-900 text-sm">{{ isEditing ? 'Edit' : 'Add' }} DOM Selector</h3>
             <button class="btn-icon btn-ghost text-gray-400" @click="drawerOpen = false">
               <Icon icon="lucide:x" class="text-sm" />
             </button>
@@ -150,6 +150,35 @@ import { ref, computed, reactive } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
+import Button from 'primevue/button'
+import Menu from 'primevue/menu'
+
+
+const isEditing = ref(false)
+const menu = ref()
+const currentItem = ref<DomSelectorRow | null>(null)
+const menuItems = ref([
+  {
+    label: 'Edit',
+    icon: 'pi pi-pencil',
+    command: () => {
+      if (currentItem.value) {
+        isEditing.value = true
+        Object.assign(form, currentItem.value)
+        drawerOpen.value = true
+      }
+    }
+  },
+  {
+    label: 'Delete',
+    icon: 'pi pi-trash',
+    command: () => {
+      if (currentItem.value) {
+        items.value = items.value.filter(i => i.id !== currentItem.value!.id)
+      }
+    }
+  }
+])
 
 type MultipleStrategy = 'first' | 'last' | 'all'
 
@@ -168,12 +197,7 @@ interface DomSelectorRow {
   updatedAt: string
 }
 
-const items = ref<DomSelectorRow[]>([
-  { id: 1, extensionContextId: 101, key: 'checkout.total', selector: '#checkout .order-summary .total .amount', fallbacks: ['.total-amount'], multipleStrategy: 'first', attribute: 'textContent', description: 'Extracts the final payable total on checkout.', version: 3, isActive: true, createdAt: '2025-10-05 14:22', updatedAt: '2025-11-12 09:10' },
-  { id: 2, extensionContextId: 101, key: 'cart.item.name', selector: '.cart-items .item .name', fallbacks: [], multipleStrategy: 'all', attribute: 'textContent', description: 'Gets the names of all items in the cart.', version: 1, isActive: true, createdAt: '2025-09-21 08:01', updatedAt: '2025-10-01 12:45' },
-  { id: 3, extensionContextId: 202, key: 'customer.email', selector: 'input[type="email"][name="customer[email]"]', fallbacks: ['#email'], multipleStrategy: 'first', attribute: 'value', description: 'Email field on customer details form.', version: 2, isActive: false, createdAt: '2025-06-10 10:00', updatedAt: '2025-11-30 16:30' },
-  { id: 4, extensionContextId: 303, key: 'receipt.ad-banner', selector: '.receipt .ad-banner', fallbacks: [], multipleStrategy: 'first', attribute: null, description: 'Target promotional banner on receipt.', version: 4, isActive: false, createdAt: '2025-03-11 11:11', updatedAt: '2025-03-20 14:33' },
-])
+const items = ref<DomSelectorRow[]>([])
 
 const search = ref('')
 const statusFilter = ref('')
@@ -205,6 +229,7 @@ function resetForm() {
   form.multipleStrategy = 'first'
   form.attribute = ''
   form.isActive = true
+  isEditing.value = false
 }
 
 function handleSave() {
@@ -212,9 +237,25 @@ function handleSave() {
   const now = new Date()
   const pad = (n: number) => String(n).padStart(2, '0')
   const ts = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`
-  const nextId = (items.value.reduce((max, it) => Math.max(max, it.id), 0) || 0) + 1
-  items.value.unshift({ id: nextId, extensionContextId: form.extensionContextId, key: form.key, selector: form.selector, fallbacks: [], multipleStrategy: form.multipleStrategy, attribute: form.attribute || null, description: form.description || null, version: 1, isActive: form.isActive, createdAt: ts, updatedAt: ts })
+  if (isEditing.value && currentItem.value) {
+    // update
+    const index = items.value.findIndex(i => i.id === currentItem.value!.id)
+    if (index !== -1) {
+      items.value[index] = { ...items.value[index], ...form, updatedAt: ts }
+    }
+  } else {
+    // add
+    const nextId = (items.value.reduce((max, it) => Math.max(max, it.id), 0) || 0) + 1
+    items.value.unshift({ id: nextId, extensionContextId: form.extensionContextId, key: form.key, selector: form.selector, fallbacks: [], multipleStrategy: form.multipleStrategy, attribute: form.attribute || null, description: form.description || null, version: 1, isActive: form.isActive, createdAt: ts, updatedAt: ts })
+  }
   drawerOpen.value = false
   resetForm()
 }
+
+const toggle = (event: Event, item: DomSelectorRow) => {
+  currentItem.value = item
+  menu.value?.toggle(event)
+}
 </script>
+
+

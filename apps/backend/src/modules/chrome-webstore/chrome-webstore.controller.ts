@@ -3,17 +3,22 @@ import {
   Get,
   Post,
   Body,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigurationSettings } from '../../dtos/entities/configuration.entity';
 import { ChromeWebstoreRequest } from '../../dtos/requests/chrome-webstore.request';
+import { ChromeWebstoreService } from './chrome-webstore.service';
+import { ChromeWebstoreFetchStatusResponse } from '../../dtos/response/chromewebstore_fetchStatus';
 
 @Controller('chrome-webstore')
 export class ChromeWebstoreController {
   constructor(
     private config: ConfigService,
+    private chromeWebstoreService: ChromeWebstoreService,
     @InjectRepository(ConfigurationSettings)
     private configRepo: Repository<ConfigurationSettings>,
   ) {}
@@ -59,5 +64,18 @@ export class ChromeWebstoreController {
     }
 
     return { message: 'Publisher ID saved successfully' };
+  }
+
+  @Get('items/:extensionId')
+  async getExtensionItem(
+    @Param('extensionId') extensionId: string,
+  ): Promise<ChromeWebstoreFetchStatusResponse> {
+    const configured = await this.chromeWebstoreService.isCredentialSet();
+    if (!configured) {
+      throw new NotFoundException(
+        'Chrome Web Store credentials are not configured',
+      );
+    }
+    return this.chromeWebstoreService.getItemStatus(extensionId);
   }
 }

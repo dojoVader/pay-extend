@@ -1,16 +1,25 @@
 services:
   frontend:
-    build: apps/spa
+    build: ./apps/spa
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./apps/spa:/app
+      - /app/node_modules
     depends_on:
       - backend
-    restart: always
     develop:
       watch:
+        - action: sync
+          path: apps/spa/src
+          target: /app/src
+        - action: sync
+          path: apps/spa/public
+          target: /app/public
         - action: sync+restart
-          path: apps/spa
-          target: /usr/share/nginx/html
-          ignore:
-            - node_modules
+          path: apps/spa/package.json
+          target: /app/package.json
 
   backend:
     build: ./apps/backend

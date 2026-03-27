@@ -2,10 +2,12 @@
   <AppLayout>
     <div class="flex items-start justify-between mb-6">
       <PageHeader title="Extensions Manager" subtitle="Extension" />
-      <button class="btn btn-primary btn-sm" @click="drawerOpen = true">
-        <Icon icon="lucide:plus" class="text-sm" />
-        Add Extension
-      </button>
+     <div class="flex gap-2">
+       <button class="btn btn-primary btn-sm" @click="drawerOpen = true">
+         <Icon icon="lucide:plus" class="text-sm" />
+         Add Extension
+       </button>
+     </div>
     </div>
 
     <div class="card overflow-hidden">
@@ -95,7 +97,10 @@
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-medium text-gray-700 mb-1">Extension Item ID <span class="text-red-500">*</span></label>
-                  <input v-model="form.extensionItemId" type="text" class="form-input" placeholder="Unique ID" />
+                  <IconField>
+                    <InputText v-model="form.extensionItemId" variant="filled" placeholder="Unique ID" :disabled="isFetchingExtension" class="w-full" />
+                    <InputIcon v-if="isFetchingExtension" class="pi pi-spin pi-spinner" />
+                  </IconField>
                   <p v-if="errors.extensionItemId" class="text-xs text-red-500 mt-1">{{ errors.extensionItemId }}</p>
                 </div>
                 <div>
@@ -107,7 +112,7 @@
 
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">Description <span class="text-red-500">*</span></label>
-                <textarea v-model="form.extensionDescription" rows="3" class="form-input" placeholder="What does this extension do?" />
+                <textarea v-model="form.extensionDescription" rows="3" class="form-input" placeholder="What does this extension do?" maxlength="255" />
                 <div class="flex justify-between mt-1">
                   <p v-if="errors.extensionDescription" class="text-xs text-red-500">{{ errors.extensionDescription }}</p>
                   <p class="text-xs text-gray-400 ml-auto">{{ form.extensionDescription.length }}/255</p>
@@ -132,7 +137,7 @@
             <button class="btn btn-secondary btn-sm" @click="resetForm">Reset</button>
             <div class="flex gap-2">
               <button class="btn btn-secondary btn-sm" @click="drawerOpen = false">Cancel</button>
-              <button class="btn btn-primary btn-sm" :disabled="isSubmitting" @click="handleSubmit">
+              <button class="btn btn-primary btn-sm" :disabled="isSubmitting || isFetchingExtension" @click="handleSubmit">
                 <Icon v-if="isSubmitting" icon="lucide:loader-2" class="text-sm animate-spin" />
                 Save
               </button>
@@ -145,8 +150,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, onMounted } from 'vue'
+import { ref, computed, reactive, onMounted, watch } from 'vue'
 import { Icon } from '@iconify/vue'
+import IconField from 'primevue/iconfield'
+import InputText from 'primevue/inputtext'
+import InputIcon from 'primevue/inputicon'
 import AppLayout from '@/layouts/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import { PAYEXTEND_BASE_URL } from '@/constant'
@@ -161,11 +169,30 @@ interface Extension {
   createdAt: string
 }
 
+interface DistributionChannel {
+  deployPercentage: number;
+  crxVersion: string;
+}
+
+interface PublishedItemRevisionStatus {
+  state: string;
+  distributionChannels: DistributionChannel[];
+}
+
+interface ChromeWebstoreFetchStatusResponse {
+  name: string;
+  itemId: string;
+  publicKey: string;
+  publishedItemRevisionStatus: PublishedItemRevisionStatus;
+}
+
+
 const items = ref<Extension[]>([])
 const search = ref('')
 const statusFilter = ref('')
 const drawerOpen = ref(false)
 const isSubmitting = ref(false)
+const isFetchingExtension = ref(false)
 const statusOptions = ['Pending', 'Published', 'Rejected', 'Disabled']
 
 const form = reactive({
@@ -184,6 +211,23 @@ const errors = reactive<Record<string, string | null>>({
   extensionDescription: null,
 })
 
+let fetchTimeout: ReturnType<typeof setTimeout> | null = null
+watch(() => form.extensionItemId, (val) => {
+  if (fetchTimeout) clearTimeout(fetchTimeout)
+  if (!val) return
+  fetchTimeout = setTimeout(async () => {
+    isFetchingExtension.value = true
+    try {
+      const response = (await fetch(`${PAYEXTEND_BASE_URL}chrome-webstore/items/${val}`)) as unknown as ChromeWebstoreFetchStatusResponse;
+      form.status = response.publishedItemRevisionStatus.state;
+    } catch {
+      // ignore — credential check is handled by the backend
+    } finally {
+      isFetchingExtension.value = false
+    }
+  }, 500)
+})
+
 const filtered = computed(() => {
   return items.value.filter((item) => {
     const matchSearch = !search.value || item.extensionName.toLowerCase().includes(search.value.toLowerCase()) || item.extensionItemId.toLowerCase().includes(search.value.toLowerCase())
@@ -198,7 +242,7 @@ onMounted(() => {
 
 async function fetchExtensions() {
   try {
-    const response = await fetch(`${PAYEXTEND_BASE_URL}extension`)
+    const response = await fetch(`${PAYEXTEND_BASE_URL}extension/all`)
     if (response.ok) {
       items.value = await response.json()
     }

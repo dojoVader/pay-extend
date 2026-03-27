@@ -83,12 +83,7 @@ interface LogRecord {
   title?: string
 }
 
-const items = ref<LogRecord[]>([
-  { id: 1, date_created: '2025-12-09T10:22:00Z', title: 'Checkout totals captured', source: 'content-script.js', payloads: [{ key: 'checkout.total', value: '$123.45', currency: 'USD' }] },
-  { id: 2, date_created: '2025-12-09T10:30:15Z', title: 'Cart items', source: 'content-script.js', payloads: [{ key: 'cart.items', value: [{ name: 'T-Shirt', qty: 2 }, { name: 'Socks', qty: 3 }] }] },
-  { id: 3, date_created: '2025-12-08T18:05:00Z', title: 'Customer email found', source: 'content-script.js', payloads: [{ key: 'customer.email', value: 'alice@example.com' }] },
-  { id: 4, date_created: '2025-12-07T09:11:44Z', title: 'Ad banner detected', source: 'content-script.js', payloads: [{ key: 'ad.banner', value: { adId: 'ad_987', visible: true } }] },
-])
+const items = ref<LogRecord[]>([])
 
 const search = ref('')
 

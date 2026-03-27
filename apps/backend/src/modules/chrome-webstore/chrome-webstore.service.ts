@@ -6,10 +6,12 @@ import { Repository } from 'typeorm';
 import { OAuth2Client } from 'google-auth-library';
 import { firstValueFrom } from 'rxjs';
 import { ConfigurationSettings } from '../../dtos/entities/configuration.entity';
+import { ChromeWebstoreFetchStatusResponse } from '../../dtos/response/chromewebstore_fetchStatus';
 
 @Injectable()
 export class ChromeWebstoreService {
   private oauth2Client: OAuth2Client;
+  public publisherID: ConfigurationSettings;
 
   constructor(
     private config: ConfigService,
@@ -17,12 +19,17 @@ export class ChromeWebstoreService {
     @InjectRepository(ConfigurationSettings)
     private configRepo: Repository<ConfigurationSettings>,
   ) {
-    this.oauth2Client = new OAuth2Client(
-      this.config.get('CLIENT_ID'),
-      this.config.get('CLIENT_SECRET'),
-    );
+    this.oauth2Client = new OAuth2Client({
+      clientId: this.config.get('CLIENT_ID'),
+      clientSecret: this.config.get('CLIENT_SECRET'),
+      redirectUri: 'https://developers.google.com/oauthplayground',
+      forceRefreshOnFailure: true,
+    });
     this.oauth2Client.setCredentials({
+      expiry_date: Date.now() + 3600 * 1000, // 1 hour in the future
       refresh_token: this.config.get('REFRESH_TOKEN'),
+      scope:
+        'https://www.googleapis.com/auth/chromewebstore https://www.googleapis.com/auth/chromewebstore.readonly',
     });
   }
 
@@ -41,12 +48,17 @@ export class ChromeWebstoreService {
     );
   }
 
-  async getItemStatus(itemId: string) {
+  async getItemStatus(
+    itemId: string,
+  ): Promise<ChromeWebstoreFetchStatusResponse> {
     try {
+      this.publisherID = await this.configRepo.findOne({
+        where: { key: 'chrome:webstore:publisherID' },
+      });
       const { token } = await this.oauth2Client.getAccessToken();
       const response = await firstValueFrom(
         this.httpService.get(
-          `https://www.googleapis.com/chromewebstore/v1.1/items/${itemId}`,
+          `https://chromewebstore.googleapis.com/v2/publishers/${this.publisherID.value}/items/${itemId}:fetchStatus`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
