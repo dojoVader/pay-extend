@@ -160,7 +160,7 @@ import { ref, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
-import { fetchWithAuth } from '@/helpers/fetchWithAuth'
+import { PAYEXTEND_BASE_URL } from '@/constant'
 
 const oat = ref('')
 const webhookUrl = ref('')
@@ -262,7 +262,7 @@ async function copyWebhook() {
 
 async function loadSettings() {
   try {
-    const res = await fetchWithAuth('/api/polar/settings')
+    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/settings`)
     if (res.ok) {
       const data = await res.json()
       oat.value = data.oat ?? ''
@@ -291,7 +291,7 @@ async function saveSettings() {
   saveSuccess.value = false
 
   try {
-    const res = await fetchWithAuth('/api/polar/settings', {
+    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/settings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

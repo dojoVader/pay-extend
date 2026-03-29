@@ -1,25 +1,19 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 @Entity()
 export class PolarExtensionMapping {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @IsNumber()
   @IsNotEmpty()
   @Column()
-  extensionId: number;
+  extensionId: string;
 
   @IsString()
   @IsOptional()
   @Column({ nullable: true })
   productId: string | null;
-
-  @IsString()
-  @IsOptional()
-  @Column({ nullable: true })
-  discountId: string | null;
 
   @IsString()
   @IsOptional()

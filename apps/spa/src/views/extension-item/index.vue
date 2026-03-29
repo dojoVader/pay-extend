@@ -11,6 +11,7 @@
     </div>
 
     <ExtensionDetails
+      :extension-id="extension?.id"
       :extension-item-id="extension?.extensionItemId"
       :description="extension?.extensionDescription"
     />

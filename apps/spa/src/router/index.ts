@@ -21,6 +21,11 @@ const router = createRouter({
       component: () => import('@/views/extension-item/index.vue'),
     },
     {
+      path: '/extension/discounts',
+      name: 'Discounts',
+      component: () => import('@/views/discounts/index.vue'),
+    },
+    {
       path: '/extension/dom-selector',
       name: 'DOM Selectors',
       component: () => import('@/views/dom-selectors/index.vue'),

@@ -113,6 +113,7 @@ const menu: NavSection[] = [
     icon: 'lucide:picture-in-picture-2',
     children: [
       { key: 'extension-list', label: 'Extensions', icon: 'lucide:blocks', url: '/extension/index' },
+      { key: 'discounts', label: 'Discounts', icon: 'lucide:tag', url: '/extension/discounts' },
       { key: 'dom-selector', label: 'DOM Selector', icon: 'lucide:code', url: '/extension/dom-selector' },
       { key: 'extension-logs', label: 'Logs', icon: 'lucide:scroll-text', url: '/extension/logs' },
     ],

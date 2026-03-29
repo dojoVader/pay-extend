@@ -7,9 +7,8 @@
     <p class="text-sm text-gray-500 max-w-2xl">{{ description ?? "—" }}</p>
   </div>
 
-  <Tabs value="discount">
+  <Tabs value="product">
     <TabList>
-      <Tab value="discount">Discount</Tab>
       <Tab value="product">Product</Tab>
       <Tab value="checkout">Checkout Sessions</Tab>
       <Tab value="analytics">Analytics</Tab>
@@ -17,9 +16,6 @@
     </TabList>
 
     <TabPanels>
-      <TabPanel value="discount">
-        <DiscountPanel />
-      </TabPanel>
       <TabPanel value="product">
         <ProductPanel />
       </TabPanel>
@@ -38,6 +34,7 @@
 
 <script setup lang="ts">
 defineProps<{
+  extensionId?: number
   extensionItemId?: string
   description?: string
 }>();
