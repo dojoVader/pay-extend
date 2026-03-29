@@ -8,6 +8,9 @@ import { PolarExtensionMapping } from '../../dtos/entities/polar/polar_extension
 import { ConfigService } from '@nestjs/config';
 import { DiscountCreateRequest } from '../../dtos/requests/polar/discount_create_request';
 import { PolarDiscountCreateResponse } from '../../dtos/response/polar/polar_discount_create';
+import { ProductCreateRequest } from '../../dtos/requests/polar/product_create_request';
+import { PolarProductCreateResponse } from '../../dtos/response/polar/polar_product_create';
+import { RefundCreateRequest } from '../../dtos/requests/polar/refund_create_request';
 
 @Injectable()
 export class PolarService {
@@ -67,7 +70,7 @@ export class PolarService {
     data: Partial<
       Pick<
         PolarExtensionMapping,
-        'productId' | 'checkSessionId' | 'subscriptionId'
+        'productId' | 'refundId' | 'checkSessionId' | 'subscriptionId'
       >
     >,
   ): Promise<PolarExtensionMapping> {
@@ -80,7 +83,7 @@ export class PolarService {
     data: Partial<
       Pick<
         PolarExtensionMapping,
-        'productId' | 'checkSessionId' | 'subscriptionId'
+        'productId' | 'refundId' | 'checkSessionId' | 'subscriptionId'
       >
     >,
   ): Promise<PolarExtensionMapping> {
@@ -127,6 +130,93 @@ export class PolarService {
     return response.json();
   }
 
+  async listProductsForExtension(extensionId: string): Promise<unknown> {
+    const mappings = await this.polarMappingsRepo.find({
+      where: { extensionId },
+    });
+    const productIds = [
+      ...new Set(mappings.map((m) => m.productId).filter(Boolean)),
+    ] as string[];
+    if (!productIds.length) return { items: [] };
+    const params = new URLSearchParams();
+    productIds.forEach((id) => params.append('id', id));
+    return this.polarFetch(`/v1/products?${params.toString()}`);
+  }
+
+  async listCheckoutsForExtension(extensionId: string): Promise<unknown> {
+    const mappings = await this.polarMappingsRepo.find({
+      where: { extensionId },
+    });
+    const sessionIds = [
+      ...new Set(mappings.map((m) => m.checkSessionId).filter(Boolean)),
+    ] as string[];
+    if (!sessionIds.length) return { items: [] };
+    const params = new URLSearchParams();
+    sessionIds.forEach((id) => params.append('id', id));
+    return this.polarFetch(`/v1/checkouts?${params.toString()}`);
+  }
+
+  async createProduct(
+    dto: ProductCreateRequest,
+  ): Promise<PolarProductCreateResponse> {
+    const price: Record<string, unknown> = {
+      amount_type: dto.amountType,
+      type: dto.priceType,
+      ...(dto.amountType === 'fixed' && {
+        price_amount: dto.priceAmount,
+        price_currency: dto.priceCurrency ?? 'usd',
+      }),
+      ...(dto.priceType === 'recurring' && {
+        recurring_interval: dto.recurringInterval ?? 'month',
+      }),
+    };
+
+    const product = (await this.polarFetch('/v1/products', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: dto.name,
+        ...(dto.description && { description: dto.description }),
+        prices: [price],
+      }),
+    })) as PolarProductCreateResponse;
+
+    await this.createMapping(dto.extensionId, { productId: product.id });
+    return product;
+  }
+
+  async archiveProduct(id: string): Promise<unknown> {
+    return this.polarFetch(`/v1/products/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ is_archived: true }),
+    });
+  }
+
+  async listRefundsForExtension(extensionId: string): Promise<unknown> {
+    const mappings = await this.polarMappingsRepo.find({
+      where: { extensionId },
+    });
+    const refundIds = [
+      ...new Set(mappings.map((m) => m.refundId).filter(Boolean)),
+    ] as string[];
+    if (!refundIds.length) return { items: [] };
+    const params = new URLSearchParams();
+    refundIds.forEach((id) => params.append('id', id));
+    return this.polarFetch(`/v1/refunds?${params.toString()}`);
+  }
+
+  async createRefund(dto: RefundCreateRequest): Promise<unknown> {
+    const refund = (await this.polarFetch('/v1/refunds', {
+      method: 'POST',
+      body: JSON.stringify({
+        order_id: dto.orderId,
+        ...(dto.amount && { amount: dto.amount }),
+        ...(dto.reason && { reason: dto.reason }),
+      }),
+    })) as { id: string };
+    await this.createMapping(dto.extensionId, { refundId: refund.id });
+    return refund;
+  }
+
   async listDiscounts(): Promise<unknown> {
     return this.polarFetch('/v1/discounts');
   }
@@ -138,7 +228,8 @@ export class PolarService {
   async createDiscount(
     data: DiscountCreateRequest,
   ): Promise<PolarDiscountCreateResponse> {
-    const { extensionId: _, ...payload } = data;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { extensionId, ...payload } = data;
     return (await this.polarFetch('/v1/discounts', {
       method: 'POST',
       body: JSON.stringify(payload),

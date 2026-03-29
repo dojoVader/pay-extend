@@ -12,6 +12,8 @@ import { PolarService } from './polar.service';
 import { PolarGuard } from './polar.guard';
 import { PolarSettingsRequest } from '../../dtos/requests/polar-settings.request';
 import { DiscountCreateRequest } from '../../dtos/requests/polar/discount_create_request';
+import { ProductCreateRequest } from '../../dtos/requests/polar/product_create_request';
+import { RefundCreateRequest } from '../../dtos/requests/polar/refund_create_request';
 import { ConfigService } from '@nestjs/config';
 @Controller('polar')
 export class PolarController {
@@ -61,6 +63,37 @@ export class PolarController {
     return this.polarService.getPaymentRecords();
   }
 
+  @Get('products/extension/:extensionId')
+  async listProductsForExtension(@Param('extensionId') extensionId: string) {
+    return this.polarService.listProductsForExtension(extensionId);
+  }
+
+  @Get('checkouts/extension/:extensionId')
+  async listCheckoutsForExtension(@Param('extensionId') extensionId: string) {
+    return this.polarService.listCheckoutsForExtension(extensionId);
+  }
+
+  @Get('refunds/extension/:extensionId')
+  async listRefundsForExtension(@Param('extensionId') extensionId: string) {
+    return this.polarService.listRefundsForExtension(extensionId);
+  }
+
+  @Post('refunds')
+  async createRefund(@Body() dto: RefundCreateRequest) {
+    return this.polarService.createRefund(dto);
+  }
+
+  @Post('products')
+  async createProduct(@Body() dto: ProductCreateRequest) {
+    return this.polarService.createProduct(dto);
+  }
+
+  @Delete('products/:id')
+  async archiveProduct(@Param('id') id: string) {
+    await this.polarService.archiveProduct(id);
+    return { message: 'Product archived' };
+  }
+
   @Get('discounts')
   async listDiscounts() {
     return this.polarService.listDiscounts();
@@ -108,7 +141,6 @@ export class PolarController {
     },
   ) {
     return this.polarService.createMapping(body.extensionId, {
-      discountId: body.discountId,
       productId: body.productId,
       checkSessionId: body.checkSessionId,
       subscriptionId: body.subscriptionId,

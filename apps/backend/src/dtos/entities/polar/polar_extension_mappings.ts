@@ -18,6 +18,11 @@ export class PolarExtensionMapping {
   @IsString()
   @IsOptional()
   @Column({ nullable: true })
+  refundId: string | null;
+
+  @IsString()
+  @IsOptional()
+  @Column({ nullable: true })
   checkSessionId: string | null;
 
   @IsString()

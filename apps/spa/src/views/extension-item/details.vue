@@ -11,22 +11,22 @@
     <TabList>
       <Tab value="product">Product</Tab>
       <Tab value="checkout">Checkout Sessions</Tab>
-      <Tab value="analytics">Analytics</Tab>
       <Tab value="refunds">Refunds</Tab>
+      <Tab value="analytics">Analytics</Tab>
     </TabList>
 
     <TabPanels>
       <TabPanel value="product">
-        <ProductPanel />
+        <ProductPanel :extension-id="extensionItemId" />
       </TabPanel>
       <TabPanel value="checkout">
-        <CheckoutPanel />
+        <CheckoutPanel :extension-id="extensionItemId" />
+      </TabPanel>
+      <TabPanel value="refunds">
+        <RefundsPanel :extension-id="extensionItemId" />
       </TabPanel>
       <TabPanel value="analytics">
         <AnalyticsPanel />
-      </TabPanel>
-      <TabPanel value="refunds">
-        <RefundsPanel />
       </TabPanel>
     </TabPanels>
   </Tabs>
@@ -44,7 +44,6 @@ import TabList from "primevue/tablist";
 import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
-import DiscountPanel from "./discount/index.vue";
 import ProductPanel from "./product/index.vue";
 import CheckoutPanel from "./checkout/index.vue";
 import AnalyticsPanel from "./analytics/index.vue";
