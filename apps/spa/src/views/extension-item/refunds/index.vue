@@ -174,7 +174,7 @@ import Dialog from 'primevue/dialog'
 import Drawer from 'primevue/drawer'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 interface Refund {
   id: string
@@ -218,7 +218,7 @@ async function fetchRefunds() {
   if (!props.extensionId) return
   loading.value = true
   try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/refunds/extension/${props.extensionId}`)
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/refunds/extension/${props.extensionId}`)
     if (res.ok) {
       const data = await res.json()
       refunds.value = data?.items ?? data ?? []
@@ -255,7 +255,7 @@ async function handleSubmit() {
       ...(form.amount && { amount: Number(form.amount) }),
       ...(form.reason && { reason: form.reason }),
     }
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/refunds`, {
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/refunds`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

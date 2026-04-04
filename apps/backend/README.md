@@ -24,7 +24,7 @@
 
 ## Description
 
-PayExtend is a NestJS project designed to provide a robust backend solution for web applications and browser extensions. It integrates various services such as Firebase, Stripe, Polar.sh, and LemonSqueezy to offer a comprehensive set of features for developers.
+Polarkit is a NestJS project designed to provide a robust backend solution for web applications and browser extensions. It integrates various services such as Firebase, Stripe, Polar.sh, and LemonSqueezy to offer a comprehensive set of features for developers.
 
 ### Key Features
 

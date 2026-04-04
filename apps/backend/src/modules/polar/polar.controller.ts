@@ -14,6 +14,7 @@ import { PolarSettingsRequest } from '../../dtos/requests/polar-settings.request
 import { DiscountCreateRequest } from '../../dtos/requests/polar/discount_create_request';
 import { ProductCreateRequest } from '../../dtos/requests/polar/product_create_request';
 import { RefundCreateRequest } from '../../dtos/requests/polar/refund_create_request';
+import { BenefitCreateRequest } from '../../dtos/requests/polar/benefit_create_request';
 import { ConfigService } from '@nestjs/config';
 @Controller('polar')
 export class PolarController {
@@ -108,10 +109,6 @@ export class PolarController {
   async createDiscount(@Body() dto: DiscountCreateRequest) {
     console.log(dto);
     const discount = await this.polarService.createDiscount(dto);
-
-    await this.polarService.createMapping(dto.extensionId, {
-      discountId: discount.id,
-    });
     return { message: 'Discount created successfully', discount };
   }
 
@@ -127,6 +124,54 @@ export class PolarController {
   async deleteDiscount(@Param('id') id: string) {
     await this.polarService.deleteDiscount(id);
     return { message: 'Discount deleted' };
+  }
+
+  // ── Benefits ──────────────────────────────────────────────────────────────
+
+  @Post('benefits')
+  async createBenefit(@Body() dto: BenefitCreateRequest) {
+    return this.polarService.createBenefit(dto);
+  }
+
+  // ── License Keys ──────────────────────────────────────────────────────────
+
+  @Get('licenses/extension/:extensionId')
+  async listLicensesForExtension(@Param('extensionId') extensionId: string) {
+    return this.polarService.listLicensesForExtension(extensionId);
+  }
+
+  @Get('licenses/:id')
+  async getLicense(@Param('id') id: string) {
+    return this.polarService.getLicense(id);
+  }
+
+  @Patch('licenses/:id')
+  async updateLicense(
+    @Param('id') id: string,
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.polarService.updateLicense(id, body);
+  }
+
+  @Post('licenses/:id/activate')
+  async activateLicense(
+    @Param('id') id: string,
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.polarService.activateLicense(id, body);
+  }
+
+  @Post('licenses/:id/deactivate')
+  async deactivateLicense(
+    @Param('id') id: string,
+    @Body() body: { activation_id: string },
+  ) {
+    return this.polarService.deactivateLicense(id, body.activation_id);
+  }
+
+  @Get('licenses/:id/activations')
+  async getLicenseActivations(@Param('id') id: string) {
+    return this.polarService.getLicenseActivations(id);
   }
 
   @Post('mapping')

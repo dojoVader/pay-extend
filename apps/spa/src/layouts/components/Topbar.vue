@@ -77,7 +77,7 @@ const routeTitles: Record<string, { breadcrumb: string; title: string }> = {
   '/integrations/extension/chrome-webstore': { breadcrumb: 'Integrations', title: 'Chrome Webstore' },
 }
 
-const info = computed(() => routeTitles[route.path] ?? { breadcrumb: 'PayExtend', title: '' })
+const info = computed(() => routeTitles[route.path] ?? { breadcrumb: 'Polarkit', title: '' })
 const breadcrumb = computed(() => info.value.breadcrumb)
 const title = computed(() => info.value.title)
 

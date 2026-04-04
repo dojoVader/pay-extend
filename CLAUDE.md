@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PayExtend is a monorepo for a browser extension management SaaS platform. It consists of a NestJS backend API and a Vue 3 SPA dashboard, orchestrated via Docker Compose with Nginx as a reverse proxy.
+PolarKit is a monorepo for a browser extension management SaaS platform. It consists of a NestJS backend API and a Vue 3 SPA dashboard, orchestrated via Docker Compose with Nginx as a reverse proxy.
 
 ## Monorepo Structure
 
@@ -103,7 +103,7 @@ MariaDB 10.11 in Docker. TypeORM is configured with `synchronize: true` in devel
 
 Docker Compose database credentials:
 - Host: `db`, Port: `3306`
-- User: `x64`, Password: `password`, DB: `payextend_platform`
+- User: `x64`, Password: `password`, DB: `polarkit_platform`
 
 Adminer UI available at `http://localhost:9090`.
 

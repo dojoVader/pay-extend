@@ -8,7 +8,7 @@
       <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 flex-shrink-0">
         <Icon icon="lucide:puzzle" class="text-white text-sm" />
       </div>
-      <span v-if="!collapsed" class="font-semibold text-gray-900 dark:text-neutral-100 text-sm">PayExtend</span>
+      <span v-if="!collapsed" class="font-semibold text-gray-900 dark:text-neutral-100 text-sm">Polarkit</span>
     </div>
 
     <!-- Navigation -->

@@ -149,7 +149,7 @@ import Dialog from 'primevue/dialog'
 import Drawer from 'primevue/drawer'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 interface Discount {
   id: string
@@ -205,7 +205,7 @@ onMounted(fetchDiscounts)
 async function fetchDiscounts() {
   loading.value = true
   try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/discounts`)
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/discounts`)
     if (res.ok) {
       const data = await res.json()
       discounts.value = data?.items ?? data ?? []
@@ -260,14 +260,14 @@ async function handleSubmit() {
     }
 
     if (editingId.value) {
-      const res = await fetch(`${PAYEXTEND_BASE_URL}polar/discounts/${editingId.value}`, {
+      const res = await fetch(`${POLARKIT_BASE_URL}polar/discounts/${editingId.value}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
       if (res.ok) { await fetchDiscounts(); closeDrawer() }
     } else {
-      const res = await fetch(`${PAYEXTEND_BASE_URL}polar/discounts`, {
+      const res = await fetch(`${POLARKIT_BASE_URL}polar/discounts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -284,7 +284,7 @@ async function handleSubmit() {
 async function handleDelete(id: string) {
   deletingId.value = id
   try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/discounts/${id}`, { method: 'DELETE' })
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/discounts/${id}`, { method: 'DELETE' })
     if (res.ok) await fetchDiscounts()
   } catch (e) {
     console.error('Failed to delete discount:', e)

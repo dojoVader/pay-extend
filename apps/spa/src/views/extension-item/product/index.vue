@@ -188,7 +188,7 @@ import Dialog from 'primevue/dialog'
 import Drawer from 'primevue/drawer'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 interface ProductPrice {
   id: string
@@ -258,7 +258,7 @@ async function fetchProducts() {
   if (!props.extensionId) return
   loading.value = true
   try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/products/extension/${props.extensionId}`)
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/products/extension/${props.extensionId}`)
     if (res.ok) {
       const data = await res.json()
       products.value = data?.items ?? data ?? []
@@ -317,7 +317,7 @@ async function handleSubmit() {
       ...(form.priceType === 'recurring' && { recurringInterval: form.recurringInterval }),
     }
 
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/products`, {
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -336,7 +336,7 @@ async function handleSubmit() {
 async function handleArchive(id: string) {
   archivingId.value = id
   try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/products/${id}`, { method: 'DELETE' })
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/products/${id}`, { method: 'DELETE' })
     if (res.ok) await fetchProducts()
   } catch (e) {
     console.error('Failed to archive product:', e)

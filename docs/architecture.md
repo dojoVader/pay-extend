@@ -1,8 +1,8 @@
-# PayExtend — System Architecture
+# PolarKit — System Architecture
 
 ## Overview
 
-PayExtend is a monorepo SaaS platform for browser extension management. The stack consists of three main layers: an **Nginx** reverse proxy, a **NestJS** REST API, and a **Vue 3** SPA dashboard.
+PolarKit is a monorepo SaaS platform for browser extension management. The stack consists of three main layers: an **Nginx** reverse proxy, a **NestJS** REST API, and a **Vue 3** SPA dashboard.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -155,7 +155,7 @@ src/
 ├── main.ts                 App entry — mounts Vue, registers Pinia + Router
 ├── App.vue
 ├── constant/
-│   └── index.ts            PAYEXTEND_BASE_URL
+│   └── index.ts            POLARKIT_BASE_URL
 ├── router/
 │   └── index.ts            History-mode router + navigation guard
 ├── stores/

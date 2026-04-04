@@ -171,7 +171,7 @@ import InputText from "primevue/inputtext";
 import InputIcon from "primevue/inputicon";
 import AppLayout from "@/layouts/AppLayout.vue";
 import PageHeader from "@/components/PageHeader.vue";
-import { PAYEXTEND_BASE_URL } from "@/constant";
+import { POLARKIT_BASE_URL } from "@/constant";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 
@@ -253,7 +253,7 @@ watch(() => form.extensionItemId, (val) => {
   fetchTimeout = setTimeout(async () => {
     isFetchingExtension.value = true;
     try {
-      const response = (await fetch(`${PAYEXTEND_BASE_URL}chrome-webstore/items/${val}`)) as unknown as ChromeWebstoreFetchStatusResponse;
+      const response = (await fetch(`${POLARKIT_BASE_URL}chrome-webstore/items/${val}`)) as unknown as ChromeWebstoreFetchStatusResponse;
       form.status = response.publishedItemRevisionStatus.state;
     } catch {
       // ignore — credential check is handled by the backend
@@ -277,7 +277,7 @@ onMounted(() => {
 
 async function fetchExtensions() {
   try {
-    const response = await fetch(`${PAYEXTEND_BASE_URL}extension/all`);
+    const response = await fetch(`${POLARKIT_BASE_URL}extension/all`);
     if (response.ok) {
       items.value = await response.json();
     }
@@ -316,7 +316,7 @@ async function handleSubmit() {
   if (!validate()) return;
   isSubmitting.value = true;
   try {
-    const response = await fetch(`${PAYEXTEND_BASE_URL}extension/add`, {
+    const response = await fetch(`${POLARKIT_BASE_URL}extension/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)

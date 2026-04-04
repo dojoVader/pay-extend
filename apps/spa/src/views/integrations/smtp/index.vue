@@ -45,7 +45,7 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">From Name</label>
-              <input v-model="config.fromName" type="text" class="form-input" placeholder="PayExtend" />
+              <input v-model="config.fromName" type="text" class="form-input" placeholder="Polarkit" />
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">From Email</label>

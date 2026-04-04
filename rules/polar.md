@@ -1,6 +1,6 @@
 ## Polar Integration
 
-- Rewrite the /home/x64/Documents/Startup/pay-extend/apps/spa/src/views/integrations/polar/index.vue user-interface to accept both the following fields:
+- Rewrite the /home/x64/Documents/Startup/polarkit/apps/spa/src/views/integrations/polar/index.vue user-interface to accept both the following fields:
     - `oat` (string, required): The OAT (OAuth Access Token) for Polar integration.
     - `webhookUrl` (string, required): The Webhook URL for Polar integration.
     - `enabled` (boolean, optional): A flag to enable or disable the Polar integration. Default is `false`.

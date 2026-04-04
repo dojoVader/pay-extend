@@ -94,7 +94,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 const showSecret = ref(false)
 const showRefresh = ref(false)
@@ -116,7 +116,7 @@ onMounted(() => {
 
 async function getConfig() {
   try {
-    const response = await fetch(`${PAYEXTEND_BASE_URL}chrome-webstore/config`)
+    const response = await fetch(`${POLARKIT_BASE_URL}chrome-webstore/config`)
     const data = await response.json()
     if (response.status === 200) {
       config.clientId = data.clientId
@@ -135,7 +135,7 @@ async function getConfig() {
 
 async function saveConfig() {
   try {
-    const response = await fetch(`${PAYEXTEND_BASE_URL}chrome-webstore/config`, {
+    const response = await fetch(`${POLARKIT_BASE_URL}chrome-webstore/config`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -25,7 +25,7 @@ import { Icon } from '@iconify/vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import ExtensionDetails from './details.vue'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 interface Extension {
   id: number
@@ -43,7 +43,7 @@ const extension = ref<Extension | null>(null)
 
 onMounted(async () => {
   try {
-    const response = await fetch(`${PAYEXTEND_BASE_URL}extension/${route.params.id}`)
+    const response = await fetch(`${POLARKIT_BASE_URL}extension/${route.params.id}`)
     if (response.ok) {
       extension.value = await response.json()
     }

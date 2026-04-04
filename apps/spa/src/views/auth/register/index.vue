@@ -6,7 +6,7 @@
         <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
           <Icon icon="lucide:puzzle" class="text-white text-xl" />
         </div>
-        <span class="text-white text-2xl font-bold">PayExtend</span>
+        <span class="text-white text-2xl font-bold">Polarkit</span>
       </div>
       <div class="max-w-sm text-center">
         <h2 class="text-3xl font-bold text-white leading-tight mb-4">Browser extension monetisation, simplified.</h2>
@@ -25,11 +25,11 @@
           <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
             <Icon icon="lucide:puzzle" class="text-white text-sm" />
           </div>
-          <span class="text-gray-900 font-bold">PayExtend</span>
+          <span class="text-gray-900 font-bold">Polarkit</span>
         </div>
 
         <h1 class="text-2xl font-bold text-gray-900 mb-1">Create an account</h1>
-        <p class="text-sm text-gray-500 mb-8">Sign up to get started with PayExtend</p>
+        <p class="text-sm text-gray-500 mb-8">Sign up to get started with Polarkit</p>
 
         <p v-if="globalError" class="mb-4 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-center gap-2">
           <Icon icon="lucide:alert-circle" class="text-sm flex-shrink-0" />
@@ -116,7 +116,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 const router = useRouter()
 
@@ -159,7 +159,7 @@ async function onSubmit() {
   globalError.value = ''
   successMessage.value = ''
   try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}auth/register`, {
+    const res = await fetch(`${POLARKIT_BASE_URL}auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: form.name, email: form.email, password: form.password, role: form.role }),

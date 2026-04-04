@@ -1,20 +1,31 @@
 <template>
   <div class="min-h-screen flex bg-gray-50 dark:bg-black">
     <!-- Left decorative panel -->
-    <div class="hidden lg:flex lg:w-1/2 bg-indigo-600 items-center justify-center p-12 flex-col gap-8">
-      <div class="flex items-center gap-3">
+    <div
+      class="hidden lg:flex lg:w-1/2 relative items-center justify-center p-12 flex-col gap-8 overflow-hidden"
+      :style="{
+        backgroundImage: 'url(https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }"
+    >
+      <!-- Dark overlay -->
+      <div class="absolute inset-0 bg-indigo-900/70 backdrop-blur-[2px]" />
+
+      <!-- Content sits above overlay -->
+      <div class="relative z-10 flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
           <Icon icon="lucide:puzzle" class="text-white text-xl" />
         </div>
-        <span class="text-white text-2xl font-bold">PayExtend</span>
+        <span class="text-white text-2xl font-bold">Polarkit</span>
       </div>
-      <div class="max-w-sm text-center">
+      <div class="relative z-10 max-w-sm text-center">
         <h2 class="text-3xl font-bold text-white leading-tight mb-4">Browser extension monetisation, simplified.</h2>
         <p class="text-indigo-200 text-sm leading-relaxed">Manage extensions, track DOM selectors, and integrate payment gateways — all from one dashboard.</p>
       </div>
       <!-- Feature pills -->
-      <div class="flex flex-wrap gap-2 justify-center">
-        <span v-for="feat in features" :key="feat" class="px-3 py-1.5 bg-white/10 text-white text-xs rounded-full">{{ feat }}</span>
+      <div class="relative z-10 flex flex-wrap gap-2 justify-center">
+        <span v-for="feat in features" :key="feat" class="px-3 py-1.5 bg-white/10 text-white text-xs rounded-full backdrop-blur-sm border border-white/10">{{ feat }}</span>
       </div>
     </div>
 
@@ -26,11 +37,11 @@
           <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
             <Icon icon="lucide:puzzle" class="text-white text-sm" />
           </div>
-          <span class="text-gray-900 dark:text-white font-bold">PayExtend</span>
+          <span class="text-gray-900 dark:text-white font-bold">Polarkit</span>
         </div>
 
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Welcome back</h1>
-        <p class="text-sm text-gray-500 dark:text-neutral-400 mb-8">Sign in to your PayExtend account</p>
+        <p class="text-sm text-gray-500 dark:text-neutral-400 mb-8">Sign in to your Polarkit account</p>
 
         <p v-if="globalError" class="mb-4 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-center gap-2">
           <Icon icon="lucide:alert-circle" class="text-sm flex-shrink-0" />

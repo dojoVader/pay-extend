@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { decodeJWT } from '@/helpers/jwt';
-import { PAYEXTEND_BASE_URL } from '@/constant';
+import { POLARKIT_BASE_URL } from '@/constant';
 
 type User = {
   name: string;
@@ -24,7 +24,7 @@ export const useAuth = defineStore(
       loading.value = true;
       error.value = null;
       try {
-        const res = await fetch(`${PAYEXTEND_BASE_URL}auth/login`, {
+        const res = await fetch(`${POLARKIT_BASE_URL}auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),

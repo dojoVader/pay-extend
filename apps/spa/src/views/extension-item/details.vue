@@ -12,6 +12,7 @@
       <Tab value="product">Product</Tab>
       <Tab value="checkout">Checkout Sessions</Tab>
       <Tab value="refunds">Refunds</Tab>
+      <Tab value="licenses">Licenses</Tab>
       <Tab value="analytics">Analytics</Tab>
     </TabList>
 
@@ -24,6 +25,9 @@
       </TabPanel>
       <TabPanel value="refunds">
         <RefundsPanel :extension-id="extensionItemId" />
+      </TabPanel>
+      <TabPanel value="licenses">
+        <LicensesPanel :extension-id="extensionItemId" />
       </TabPanel>
       <TabPanel value="analytics">
         <AnalyticsPanel />
@@ -48,4 +52,5 @@ import ProductPanel from "./product/index.vue";
 import CheckoutPanel from "./checkout/index.vue";
 import AnalyticsPanel from "./analytics/index.vue";
 import RefundsPanel from "./refunds/index.vue";
+import LicensesPanel from "./licenses/index.vue";
 </script>

@@ -140,7 +140,7 @@
 import { ref, onMounted, watch } from 'vue'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 interface CheckoutProduct {
   id: string
@@ -185,7 +185,7 @@ async function fetchSessions() {
   if (!props.extensionId) return
   loading.value = true
   try {
-    const res = await fetch(`${PAYEXTEND_BASE_URL}polar/checkouts/extension/${props.extensionId}`)
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/checkouts/extension/${props.extensionId}`)
     if (res.ok) {
       const data = await res.json()
       sessions.value = data?.items ?? data ?? []

@@ -40,7 +40,7 @@ export class ExtensionService {
     return this.extensionRepository.find();
   }
   /**
-   * This method saves an extension to the PayExtend platform allowing the user
+   * This method saves an extension to the Polarkit platform allowing the user
    * to add extensions to the platform
    * @param data ExtensionRequest
    * @returns

@@ -11,6 +11,8 @@ import { PolarDiscountCreateResponse } from '../../dtos/response/polar/polar_dis
 import { ProductCreateRequest } from '../../dtos/requests/polar/product_create_request';
 import { PolarProductCreateResponse } from '../../dtos/response/polar/polar_product_create';
 import { RefundCreateRequest } from '../../dtos/requests/polar/refund_create_request';
+import { BenefitCreateRequest } from '../../dtos/requests/polar/benefit_create_request';
+import { PolarBenefitResponse } from '../../dtos/response/polar/polar_benefits_reponse';
 
 @Injectable()
 export class PolarService {
@@ -70,7 +72,11 @@ export class PolarService {
     data: Partial<
       Pick<
         PolarExtensionMapping,
-        'productId' | 'refundId' | 'checkSessionId' | 'subscriptionId'
+        | 'productId'
+        | 'refundId'
+        | 'checkSessionId'
+        | 'subscriptionId'
+        | 'benefitsId'
       >
     >,
   ): Promise<PolarExtensionMapping> {
@@ -83,7 +89,11 @@ export class PolarService {
     data: Partial<
       Pick<
         PolarExtensionMapping,
-        'productId' | 'refundId' | 'checkSessionId' | 'subscriptionId'
+        | 'productId'
+        | 'refundId'
+        | 'checkSessionId'
+        | 'subscriptionId'
+        | 'benefitsId'
       >
     >,
   ): Promise<PolarExtensionMapping> {
@@ -248,5 +258,87 @@ export class PolarService {
 
   async deleteDiscount(id: string): Promise<void> {
     await this.polarFetch(`/v1/discounts/${id}`, { method: 'DELETE' });
+  }
+
+  // ── Benefits ──────────────────────────────────────────────────────────────
+
+  async createBenefit(dto: BenefitCreateRequest): Promise<PolarBenefitResponse> {
+    const properties: Record<string, unknown> = {};
+    if (dto.activationLimit) {
+      properties['activations'] = {
+        limit: dto.activationLimit,
+        enable_customer_cancel: true,
+      };
+    }
+    if (dto.usageLimit) {
+      properties['limit_usage'] = dto.usageLimit;
+    }
+
+    const benefit = (await this.polarFetch('/v1/benefits', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'license_keys',
+        name: dto.name,
+        ...(dto.description && { description: dto.description }),
+        properties,
+      }),
+    })) as PolarBenefitResponse;
+
+    const existing = await this.getMappingByExtensionId(dto.extensionId);
+    if (existing) {
+      await this.updateMapping(existing.id, { benefitsId: benefit.id });
+    } else {
+      await this.createMapping(dto.extensionId, { benefitsId: benefit.id });
+    }
+
+    return benefit;
+  }
+
+  // ── License Keys ──────────────────────────────────────────────────────────
+
+  async listLicensesForExtension(extensionId: string): Promise<unknown> {
+    const mapping = await this.getMappingByExtensionId(extensionId);
+    if (!mapping?.benefitsId) return { items: [] };
+    return this.polarFetch(
+      `/v1/license-keys?benefit_id=${mapping.benefitsId}`,
+    );
+  }
+
+  async getLicense(id: string): Promise<unknown> {
+    return this.polarFetch(`/v1/license-keys/${id}`);
+  }
+
+  async updateLicense(
+    id: string,
+    data: Record<string, unknown>,
+  ): Promise<unknown> {
+    return this.polarFetch(`/v1/license-keys/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async activateLicense(
+    id: string,
+    data: Record<string, unknown>,
+  ): Promise<unknown> {
+    return this.polarFetch(`/v1/license-keys/${id}/activate`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deactivateLicense(
+    id: string,
+    activationId: string,
+  ): Promise<unknown> {
+    return this.polarFetch(`/v1/license-keys/${id}/deactivate`, {
+      method: 'POST',
+      body: JSON.stringify({ activation_id: activationId }),
+    });
+  }
+
+  async getLicenseActivations(id: string): Promise<unknown> {
+    return this.polarFetch(`/v1/license-keys/${id}/activations`);
   }
 }

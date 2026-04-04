@@ -27,9 +27,9 @@ import { PolarExtensionMapping } from './dtos/entities/polar/polar_extension_map
       type: 'mariadb',
       host: process.env.DB_HOST || 'db',
       port: Number(process.env.DB_PORT) || 3306,
-      username: process.env.DB_USERNAME || 'payextend',
+      username: process.env.DB_USERNAME || 'polarkit',
       password: process.env.DB_PASSWORD || 'password',
-      database: process.env.DB_NAME || 'payextend',
+      database: process.env.DB_NAME || 'polarkit',
       entities: [
         Installation,
         User,
@@ -47,7 +47,7 @@ import { PolarExtensionMapping } from './dtos/entities/polar/polar_extension_map
       autoLoadEntities: true,
     }),
     DashboardModule.forRoot({
-      appName: 'PayExtend',
+      appName: 'Polarkit',
       version: '1.0.0',
       logoUrl: '/logo.png',
       menuItems: [

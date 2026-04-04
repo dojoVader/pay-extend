@@ -30,7 +30,7 @@ services:
       - DB_PORT=3306
       - DB_USERNAME=x64
       - DB_PASSWORD=password
-      - DB_NAME=payextend_platform
+      - DB_NAME=polarkit_platform
       - SECRET=Yd8hPzX5qW3rT7gJ9kL2mN4bV6cX8jF1aS3dE5fG7hJ9kL2mN4bV6cX8
       - PORT=3000
       - CLIENT_ID=639779968563-i3n3uqt1ij4j53ddgr113ae6dchv7fbl.apps.googleusercontent.com
@@ -66,7 +66,7 @@ services:
     command: '--default-authentication-plugin=mysql_native_password'
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=payextend_platform
+      - MYSQL_DATABASE=polarkit_platform
       - MYSQL_USER=root
       - MYSQL_PASSWORD=Alpha.01$
     volumes:

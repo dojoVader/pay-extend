@@ -28,5 +28,10 @@ export class PolarExtensionMapping {
   @IsString()
   @IsOptional()
   @Column({ nullable: true })
+  benefitsId: string | null;
+
+  @IsString()
+  @IsOptional()
+  @Column({ nullable: true })
   subscriptionId: string | null;
 }

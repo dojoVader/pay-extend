@@ -96,7 +96,7 @@ import { useRouter } from 'vue-router'
 import AppLayout from '@/layouts/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import { useAuth } from '@/stores/auth'
-import { PAYEXTEND_BASE_URL } from '@/constant'
+import { POLARKIT_BASE_URL } from '@/constant'
 
 const router = useRouter()
 const auth = useAuth()
@@ -104,7 +104,7 @@ const selectedRange = ref('2 years')
 
 onMounted(async () => {
   // try {
-  //   const res = await fetch(`${PAYEXTEND_BASE_URL}auth/verify`, {
+  //   const res = await fetch(`${POLARKIT_BASE_URL}auth/verify`, {
   //     method: 'GET',
   //     credentials: 'same-origin',
   //   })
