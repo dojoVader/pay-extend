@@ -88,6 +88,7 @@
             </label>
             <div class="flex items-center gap-2">
               <input
+                disabled
                 type="text"
                 v-model="webhookUrl"
                 placeholder="https://your-domain.com/api/polar/webhook"
@@ -143,6 +144,11 @@
         <button class="btn btn-primary" @click="saveSettings" :disabled="saving">
           <Icon v-if="saving" icon="lucide:loader-2" class="text-sm animate-spin" />
           {{ saving ? 'Saving...' : 'Save Settings' }}
+        </button>
+        <!--   Sync to Polar     -->
+        <button class="btn btn-primary" @click="syncToPolar" :disabled="saving">
+          <Icon v-if="syncing" icon="lucide:loader-2" class="text-sm animate-spin" />
+          {{ syncing ? 'Syncing...' : 'Sync to Polar' }}
         </button>
         <p v-if="saveSuccess" class="text-xs text-emerald-600 flex items-center gap-1">
           <Icon icon="lucide:check-circle" class="text-sm" /> Settings saved
@@ -243,6 +249,27 @@ function clearAll() {
   selectedEvents.value = []
 }
 
+async function syncToPolar() {
+  saving.value = true
+  saveError.value = ''
+  saveSuccess.value = false
+
+  try {
+    const res = await fetch(`${POLARKIT_BASE_URL}polar/sync`, { method: 'POST' })
+    if (res.ok) {
+      saveSuccess.value = true
+      setTimeout(() => (saveSuccess.value = false), 3000)
+    } else {
+      const err = await res.json()
+      saveError.value = err.message ?? 'Failed to sync with Polar'
+    }
+  } catch {
+    saveError.value = 'Network error, please try again'
+  } finally {
+    saving.value = false
+  }
+}
+
 async function copyWebhook() {
   try {
     await navigator.clipboard.writeText(webhookUrl.value)
@@ -317,5 +344,7 @@ async function saveSettings() {
   }
 }
 
-onMounted(loadSettings)
+onMounted(() => {
+  loadSettings()
+})
 </script>

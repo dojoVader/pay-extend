@@ -13,6 +13,7 @@ import { PolarProductCreateResponse } from '../../dtos/response/polar/polar_prod
 import { RefundCreateRequest } from '../../dtos/requests/polar/refund_create_request';
 import { BenefitCreateRequest } from '../../dtos/requests/polar/benefit_create_request';
 import { PolarBenefitResponse } from '../../dtos/response/polar/polar_benefits_reponse';
+import { ExtensionCreateCheckoutSession } from '../../dtos/requests/polar/extension_create_checkout_session';
 
 @Injectable()
 export class PolarService {
@@ -262,7 +263,9 @@ export class PolarService {
 
   // ── Benefits ──────────────────────────────────────────────────────────────
 
-  async createBenefit(dto: BenefitCreateRequest): Promise<PolarBenefitResponse> {
+  async createBenefit(
+    dto: BenefitCreateRequest,
+  ): Promise<PolarBenefitResponse> {
     const properties: Record<string, unknown> = {};
     if (dto.activationLimit) {
       properties['activations'] = {
@@ -299,9 +302,7 @@ export class PolarService {
   async listLicensesForExtension(extensionId: string): Promise<unknown> {
     const mapping = await this.getMappingByExtensionId(extensionId);
     if (!mapping?.benefitsId) return { items: [] };
-    return this.polarFetch(
-      `/v1/license-keys?benefit_id=${mapping.benefitsId}`,
-    );
+    return this.polarFetch(`/v1/license-keys?benefit_id=${mapping.benefitsId}`);
   }
 
   async getLicense(id: string): Promise<unknown> {
@@ -328,10 +329,7 @@ export class PolarService {
     });
   }
 
-  async deactivateLicense(
-    id: string,
-    activationId: string,
-  ): Promise<unknown> {
+  async deactivateLicense(id: string, activationId: string): Promise<unknown> {
     return this.polarFetch(`/v1/license-keys/${id}/deactivate`, {
       method: 'POST',
       body: JSON.stringify({ activation_id: activationId }),
@@ -340,5 +338,38 @@ export class PolarService {
 
   async getLicenseActivations(id: string): Promise<unknown> {
     return this.polarFetch(`/v1/license-keys/${id}/activations`);
+  }
+
+  // ── Customers ─────────────────────────────────────────────────────────────
+
+  async listCustomers(page = 1, limit = 20): Promise<unknown> {
+    return this.polarFetch(`/v1/customers?page=${page}&limit=${limit}`);
+  }
+
+  async getCustomer(id: string): Promise<unknown> {
+    return this.polarFetch(`/v1/customers/${id}`);
+  }
+
+  async listCustomerSubscriptions(customerId: string): Promise<unknown> {
+    return this.polarFetch(`/v1/subscriptions?customer_id=${customerId}`);
+  }
+
+  createPaymentForExtension(
+    extensionId: string,
+    body: ExtensionCreateCheckoutSession,
+    productIds: string | string[],
+  ) {
+    return this.polarFetch('/v1/checkouts', {
+      method: 'POST',
+      body: JSON.stringify({
+        products: [productIds],
+        metadata: { extension_id: extensionId },
+        customer: {
+          email: body.email,
+          first_name: body.firstName,
+          last_name: body.lastName,
+        },
+      }),
+    });
   }
 }

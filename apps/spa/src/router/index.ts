@@ -46,6 +46,11 @@ const router = createRouter({
       component: () => import('@/views/integrations/polar/index.vue'),
     },
     {
+      path: '/integrations/payment/firebase-admin',
+      name: 'Firebase Admin',
+      component: () => import('@/views/integrations/firebase-admin/index.vue'),
+    },
+    {
       path: '/integrations/notification/smtp',
       name: 'SMTP Settings',
       component: () => import('@/views/integrations/smtp/index.vue'),
@@ -54,6 +59,11 @@ const router = createRouter({
       path: '/integrations/extension/chrome-webstore',
       name: 'Chrome Webstore Settings',
       component: () => import('@/views/integrations/chrome-webstore/index.vue'),
+    },
+    {
+      path: '/customers',
+      name: 'Customers',
+      component: () => import('@/views/customers/index.vue'),
     },
     {
       path: '/auth/login',

@@ -118,6 +118,13 @@ const menu: NavSection[] = [
       { key: 'extension-logs', label: 'Logs', icon: 'lucide:scroll-text', url: '/extension/logs' },
     ],
   },
+  { key: 'customers-title', label: 'Customers', isTitle: true },
+  {
+    key: 'customers',
+    label: 'Customers',
+    icon: 'lucide:users',
+    url: '/customers',
+  },
   { key: 'account-title', label: 'Account', isTitle: true },
   {
     key: 'integration',

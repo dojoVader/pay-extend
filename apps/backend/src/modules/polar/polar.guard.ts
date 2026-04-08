@@ -25,12 +25,12 @@ export class PolarGuard implements CanActivate {
       );
     }
 
-    const settings = await this.settingsRepo.findOne({ where: {} });
-    if (!settings || !settings.enabled || !settings.oat) {
-      throw new UnauthorizedException(
-        'Polar integration is not enabled or OAT is missing',
-      );
-    }
+    // const settings = await this.settingsRepo.findOne({ where: {} });
+    // if (!settings || !settings.enabled || !settings.oat) {
+    //   throw new UnauthorizedException(
+    //     'Polar integration is not enabled or OAT is missing',
+    //   );
+    // }
 
     return true;
   }
