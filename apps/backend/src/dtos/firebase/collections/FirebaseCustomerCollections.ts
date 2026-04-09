@@ -1,3 +1,4 @@
+
 export interface FirebaseCustomerCollections {
   premium: boolean;
   subscriptionId: string;
@@ -7,4 +8,5 @@ export interface FirebaseCustomerCollections {
   updatedAt: Date;
   lastWebhookEvent: string;
   extensionId: string;
+  checkoutSessions: null;
 }

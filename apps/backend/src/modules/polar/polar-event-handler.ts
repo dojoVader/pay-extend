@@ -5,12 +5,16 @@ import {
   validateEvent,
   WebhookVerificationError,
 } from '@polar-sh/sdk/webhooks';
+import { FirebaseService } from '../firebase/firebase.service';
+import { FirebaseCustomerCollections } from '../../dtos/firebase/collections/FirebaseCustomerCollections';
 
 type PolarWebhookEvent = ReturnType<typeof validateEvent>;
 
 @Injectable()
 export class PolarEventHandler {
   private readonly logger = new Logger(PolarEventHandler.name);
+
+  constructor(private readonly firebaseService: FirebaseService) {}
 
   /**
    * Validates the webhook signature and dispatches to the appropriate handler.
@@ -28,7 +32,13 @@ export class PolarEventHandler {
 
     let event: PolarWebhookEvent;
     try {
+      const webHookId = this.normalizeHeaders(headers)['webhook-id'];
+      if (await this.firebaseService.checkIfWebhookProcessed(webHookId)) {
+        this.logger.warn(`Duplicate webhook received with ID: ${webHookId}`);
+        return;
+      }
       event = validateEvent(rawBody, normalizedHeaders, secret);
+      await this.firebaseService.saveWebhooksEvent(webHookId, event);
     } catch (err) {
       if (err instanceof WebhookVerificationError) {
         this.logger.warn(
@@ -169,7 +179,26 @@ export class PolarEventHandler {
   protected async onOrderCreated(
     event: Extract<PolarWebhookEvent, { type: 'order.created' }>,
   ): Promise<void> {
-    this.logger.log(`order.created: ${event.data.id}`);
+    const { id, customer, subscriptionId, status } = event.data;
+    const extensionId = (customer.externalId ??
+      customer.metadata?.extensionId ??
+      '') as string;
+    const docId = `${customer.id}@${extensionId}`;
+
+    const customerData: FirebaseCustomerCollections = {
+      premium: true,
+      subscriptionId: subscriptionId ?? id,
+      status,
+      cancelAtPeriodEnd: null as unknown as Date,
+      currentPeriodEnd: null as unknown as Date,
+      updatedAt: new Date(),
+      lastWebhookEvent: 'order.created',
+      extensionId,
+      checkoutSessions: null,
+    };
+
+    await this.firebaseService.saveCustomer(docId, customerData);
+    this.logger.log(`order.created: saved customer ${docId}`);
   }
 
   protected async onOrderUpdated(

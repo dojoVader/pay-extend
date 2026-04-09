@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { FirebaseAdmin, InjectFirebaseAdmin } from 'nestjs-firebase';
 import * as fs from 'fs';
 import * as path from 'path';
+import { FirebaseCustomerCollections } from '../../dtos/firebase/collections/FirebaseCustomerCollections';
 
 @Injectable()
 export class FirebaseService {
@@ -31,13 +32,52 @@ export class FirebaseService {
     }
   }
 
+  async saveCustomer(
+    docId: string,
+    data: FirebaseCustomerCollections,
+  ): Promise<void> {
+    await this.firebase.firestore
+      .collection('customers')
+      .doc(docId)
+      .set(data, { merge: true });
+  }
+
+  async checkIfWebhookProcessed(webhookId: string): Promise<boolean> {
+    const doc = await this.firebase.firestore
+      .collection('processed_webhooks')
+      .where('webhookId', '==', webhookId)
+      .limit(1)
+      .get();
+
+    return !doc.empty;
+  }
+
+  async saveWebhooksEvent(
+    webhookId: string,
+    event: any,
+  ): Promise<void> {
+    await this.firebase.firestore
+      .collection('processed_webhooks')
+      .doc(webhookId)
+      .set(
+        {
+          webhookId,
+          processedAt: new Date().toISOString(),
+          eventType: event.type,
+          event,
+        },
+        { merge: true },
+      );
+  }
+
   async getStatus(): Promise<{
     configured: boolean;
     credentialPath: string | null;
     projectId: string | null;
     message: string;
   }> {
-    const credentialPath = this.config.get<string>('GOOGLE_APPLICATION_CREDENTIALS') ?? null;
+    const credentialPath =
+      this.config.get<string>('GOOGLE_APPLICATION_CREDENTIALS') ?? null;
     const resolved = this.resolvedCredentialPath();
     const fileExists = !!resolved && fs.existsSync(resolved);
 

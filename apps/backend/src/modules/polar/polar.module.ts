@@ -10,6 +10,7 @@ import { PolarSettings } from '../../dtos/entities/polar/polar-settings.entity';
 import { PolarPaymentRecord } from '../../dtos/entities/polar/polar-payment-record.entity';
 import { ChromeWebstoreModule } from '../chrome-webstore/chrome-webstore.module';
 import { PolarExtensionMapping } from '../../dtos/entities/polar/polar_extension_mappings';
+import { FirebaseService } from "../firebase/firebase.service";
 
 @Module({
   imports: [
@@ -21,7 +22,13 @@ import { PolarExtensionMapping } from '../../dtos/entities/polar/polar_extension
     ]),
     ChromeWebstoreModule,
   ],
-  providers: [PolarService, PolarGuard, PolarEventHandler, PolarWebhookLoggerInterceptor],
+  providers: [
+    PolarService,
+    FirebaseService,
+    PolarGuard,
+    PolarEventHandler,
+    PolarWebhookLoggerInterceptor,
+  ],
   controllers: [PolarController],
   exports: [PolarService],
 })
