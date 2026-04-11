@@ -42,6 +42,11 @@ export class PolarController {
     private readonly polarExtensionMappingRepository: Repository<PolarExtensionMapping>,
   ) {}
 
+  @Get('metrics')
+  async getDashboardMetrics() {
+    return this.polarService.getDashboardMetrics();
+  }
+
   @Get('settings')
   async getSettings() {
     const settings = await this.polarSettingsRepository.findOne({

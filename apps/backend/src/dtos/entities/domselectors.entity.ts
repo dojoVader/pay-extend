@@ -30,15 +30,6 @@ export class DomSelector {
   @Column({ type: 'text' })
   selector: string;
 
-  @IsString()
-  @Column({
-    name: 'multiple_strategy',
-    type: 'varchar',
-    length: 20,
-    default: 'first',
-  })
-  multipleStrategy: string;
-
   @IsOptional()
   @IsString()
   @Column({ type: 'text', nullable: true })

@@ -224,13 +224,13 @@ export class PolarEventHandler {
   protected async onSubscriptionCreated(
     event: Extract<PolarWebhookEvent, { type: 'subscription.created' }>,
   ): Promise<void> {
-    this.logger.log(`subscription.created: ${event.data.id}`);
+    await this.saveSubscriptionCustomer(event.type, event.data);
   }
 
   protected async onSubscriptionUpdated(
     event: Extract<PolarWebhookEvent, { type: 'subscription.updated' }>,
   ): Promise<void> {
-    this.logger.log(`subscription.updated: ${event.data.id}`);
+    await this.saveSubscriptionCustomer(event.type, event.data);
   }
 
   protected async onSubscriptionActive(
@@ -242,7 +242,7 @@ export class PolarEventHandler {
   protected async onSubscriptionCanceled(
     event: Extract<PolarWebhookEvent, { type: 'subscription.canceled' }>,
   ): Promise<void> {
-    this.logger.log(`subscription.canceled: ${event.data.id}`);
+    await this.saveSubscriptionCustomer(event.type, event.data);
   }
 
   protected async onSubscriptionUncanceled(
@@ -254,13 +254,42 @@ export class PolarEventHandler {
   protected async onSubscriptionRevoked(
     event: Extract<PolarWebhookEvent, { type: 'subscription.revoked' }>,
   ): Promise<void> {
-    this.logger.log(`subscription.revoked: ${event.data.id}`);
+    await this.saveSubscriptionCustomer(event.type, event.data);
   }
 
   protected async onSubscriptionPastDue(
     event: Extract<PolarWebhookEvent, { type: 'subscription.past_due' }>,
   ): Promise<void> {
-    this.logger.log(`subscription.past_due: ${event.data.id}`);
+    await this.saveSubscriptionCustomer(event.type, event.data);
+  }
+
+  private async saveSubscriptionCustomer(
+    eventType: string,
+    subscription: Extract<
+      PolarWebhookEvent,
+      { type: 'subscription.created' }
+    >['data'],
+  ): Promise<void> {
+    const { id, status, currentPeriodEnd, endsAt, customer } = subscription;
+    const extensionId = (customer.externalId ??
+      customer.metadata?.extensionId ??
+      '') as string;
+    const docId = `${customer.id}@${extensionId}`;
+
+    const customerData: FirebaseCustomerCollections = {
+      premium: status === 'active' || status === 'trialing',
+      subscriptionId: id,
+      status,
+      cancelAtPeriodEnd: (endsAt ?? currentPeriodEnd) as Date,
+      currentPeriodEnd,
+      updatedAt: new Date(),
+      lastWebhookEvent: eventType,
+      extensionId,
+      checkoutSessions: null,
+    };
+
+    await this.firebaseService.saveCustomer(docId, customerData);
+    this.logger.log(`${eventType}: saved customer ${docId} [status=${status}]`);
   }
 
   // ── Customer handlers ──────────────────────────────────────────────────────

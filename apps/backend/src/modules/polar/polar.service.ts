@@ -14,6 +14,8 @@ import { RefundCreateRequest } from '../../dtos/requests/polar/refund_create_req
 import { BenefitCreateRequest } from '../../dtos/requests/polar/benefit_create_request';
 import { PolarBenefitResponse } from '../../dtos/response/polar/polar_benefits_reponse';
 import { ExtensionCreateCheckoutSession } from '../../dtos/requests/polar/extension_create_checkout_session';
+import { ExtensionContext } from '../../dtos/entities/extension.entity';
+import { DomSelector } from '../../dtos/entities/domselectors.entity';
 
 @Injectable()
 export class PolarService {
@@ -26,6 +28,10 @@ export class PolarService {
     private readonly polarMappingsRepo: Repository<PolarExtensionMapping>,
     @InjectRepository(PolarPaymentRecord)
     private readonly paymentRecordRepo: Repository<PolarPaymentRecord>,
+    @InjectRepository(ExtensionContext)
+    private readonly extensionRepo: Repository<ExtensionContext>,
+    @InjectRepository(DomSelector)
+    private readonly domSelectorRepo: Repository<DomSelector>,
     private config: ConfigService,
   ) {}
 
@@ -126,6 +132,7 @@ export class PolarService {
     const environment = await this.config.get('POLAR_ENVIRONMENT');
     const base = this.polarBaseUrl(environment ?? 'sandbox');
     const response = await fetch(`${base}${path}`, {
+      redirect: 'follow',
       ...options,
       headers: {
         Authorization: `Bearer ${oat}`,
@@ -371,5 +378,81 @@ export class PolarService {
         },
       }),
     });
+  }
+
+  async getDashboardMetrics(): Promise<Record<string, unknown>> {
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+      .toISOString()
+      .split('T')[0];
+    const endDate = now.toISOString().split('T')[0];
+
+    const [
+      polarMetrics,
+      customersPage,
+      activeExtensions,
+      domSelectorsCount,
+      paymentEventsCount,
+    ] = await Promise.allSettled([
+      this.polarFetch(
+        `/v1/metrics?start_date=${startDate}&end_date=${endDate}&interval=month`,
+      ),
+      this.polarFetch('/v1/customers?limit=1'),
+      this.extensionRepo.count({ where: { active: true } }),
+      this.domSelectorRepo.count(),
+      this.paymentRecordRepo.count(),
+    ]);
+
+    const metricsResponse =
+      polarMetrics.status === 'fulfilled'
+        ? (polarMetrics.value as Record<string, unknown>)
+        : null;
+
+    type Totals = {
+      revenue?: number;
+      net_revenue?: number;
+      orders?: number;
+      active_subscriptions?: number;
+      monthly_recurring_revenue?: number;
+      average_order_value?: number;
+      checkouts?: number;
+      succeeded_checkouts?: number;
+      new_subscriptions?: number;
+      churned_subscriptions?: number;
+      churn_rate?: number;
+      checkouts_conversion?: number;
+    };
+    const totals = (metricsResponse?.totals ?? {}) as Totals;
+
+    const customersData =
+      customersPage.status === 'fulfilled'
+        ? (customersPage.value as { pagination?: { total_count?: number } })
+        : null;
+
+    return {
+      // Transaction metrics from Polar (currency values are in cents)
+      revenue: totals.revenue ?? 0,
+      netRevenue: totals.net_revenue ?? 0,
+      orders: totals.orders ?? 0,
+      activeSubscriptions: totals.active_subscriptions ?? 0,
+      mrr: totals.monthly_recurring_revenue ?? 0,
+      averageOrderValue: totals.average_order_value ?? 0,
+      checkouts: totals.checkouts ?? 0,
+      succeededCheckouts: totals.succeeded_checkouts ?? 0,
+      newSubscriptions: totals.new_subscriptions ?? 0,
+      churnedSubscriptions: totals.churned_subscriptions ?? 0,
+      churnRate: totals.churn_rate ?? 0,
+      checkoutsConversion: totals.checkouts_conversion ?? 0,
+      // Platform stats from local DB + Polar customers
+      customers: customersData?.pagination?.total_count ?? 0,
+      activeExtensions:
+        activeExtensions.status === 'fulfilled' ? activeExtensions.value : 0,
+      domSelectors:
+        domSelectorsCount.status === 'fulfilled' ? domSelectorsCount.value : 0,
+      paymentEvents:
+        paymentEventsCount.status === 'fulfilled'
+          ? paymentEventsCount.value
+          : 0,
+    };
   }
 }
