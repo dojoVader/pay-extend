@@ -12,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { Installation } from '../../dtos/entities/installation.entity';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async register(email: string, password: string, role = 'user') {
+  async register(email: string, password: string, role = 'user', name = '') {
     // Check if the user already exists
     const existingUser = await this.userRepository.find({
       where: { email },
@@ -40,11 +41,12 @@ export class AuthService {
       email,
       password: hashedPassword,
       role,
+      name,
     });
     return this.userRepository.save(user);
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string, res: Response) {
     const user = await this.userRepository.findOneBy({ email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
@@ -66,6 +68,21 @@ export class AuthService {
       secret: this.config.get<string>('SECRET'),
     });
     // Set HTTP-only, same-site cookie
+    res.cookie('jwt', accessToken, {
+      httpOnly: true, // Prevents client-side JavaScript access
+      secure: true, // Use secure in production
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60, // 1 hour
+      path: '/', // Accessible across the app
+    });
+
+    console.log({
+      httpOnly: true, // Prevents client-side JavaScript access
+      secure: true, // Use secure in production
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60, // 1 hour
+      path: '/', // Accessible across the app
+    })
 
     return {
       access_token: accessToken,

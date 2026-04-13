@@ -4,3 +4,4 @@ node_modules/
 build/
 tmp/
 temp/
+/firebase/polarkit-datastore-firebase-adminsdk-fbsvc-72859c5fdf.json

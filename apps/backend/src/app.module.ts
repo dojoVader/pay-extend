@@ -11,7 +11,12 @@ import { DomSelector } from './dtos/entities/domselectors.entity';
 import { Notification } from './dtos/entities/notifications.entity';
 import { NotificationModule } from './modules/notifications/notification.module';
 import { ChromeWebstoreModule } from './modules/chrome-webstore/chrome-webstore.module';
-import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
+import { PolarModule } from './modules/polar/polar.module';
+import { ConfigurationSettings } from './dtos/entities/configuration.entity';
+import { PolarSettings } from './dtos/entities/polar/polar-settings.entity';
+import { PolarPaymentRecord } from './dtos/entities/polar/polar-payment-record.entity';
+import { PolarExtensionMapping } from './dtos/entities/polar/polar_extension_mappings';
+import { FirebaseAdminModule } from './modules/firebase/firebase.module';
 
 @Module({
   providers: [],
@@ -23,9 +28,9 @@ import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
       type: 'mariadb',
       host: process.env.DB_HOST || 'db',
       port: Number(process.env.DB_PORT) || 3306,
-      username: process.env.DB_USERNAME || 'payextend',
+      username: process.env.DB_USERNAME || 'polarkit',
       password: process.env.DB_PASSWORD || 'password',
-      database: process.env.DB_NAME || 'payextend',
+      database: process.env.DB_NAME || 'polarkit',
       entities: [
         Installation,
         User,
@@ -33,6 +38,9 @@ import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
         DomSelector,
         Notification,
         ConfigurationSettings,
+        PolarSettings,
+        PolarPaymentRecord,
+        PolarExtensionMapping,
       ],
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
       synchronize: true,
@@ -40,7 +48,7 @@ import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
       autoLoadEntities: true,
     }),
     DashboardModule.forRoot({
-      appName: 'PayExtend',
+      appName: 'Polarkit',
       version: '1.0.0',
       logoUrl: '/logo.png',
       menuItems: [
@@ -55,6 +63,8 @@ import { ConfigurationSettings } from "./dtos/entities/configuration.entity";
     ExtensionContextModule,
     NotificationModule,
     ChromeWebstoreModule,
+    PolarModule,
+    FirebaseAdminModule,
   ],
 })
 export class AppModule {}

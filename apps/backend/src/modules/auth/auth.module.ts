@@ -9,19 +9,13 @@ import { LocalStrategy } from './strategies/local.strategy';
 import * as process from 'node:process';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
-import { JwtGuard } from "./guards/jwtauth.guard";
-import { APP_GUARD } from "@nestjs/core";
-import { Installation } from "../../dtos/entities/installation.entity";
+import { Installation } from '../../dtos/entities/installation.entity';
 
 console.log(process.env.SECRET); // Ensure this is set in your environment
 
 @Module({
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    JwtStrategy,
-  ],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   imports: [
     ConfigModule,
     TypeOrmModule.forFeature([User, Installation]),

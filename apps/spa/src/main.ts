@@ -1,31 +1,33 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import piniaPersistedState from 'pinia-plugin-persistedstate'
-import App from './App.vue'
-import router from './router'
+import './assets/main.css';
+import 'primeicons/primeicons.css';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import PrimeVue from 'primevue/config';
+import Aura from '@primevue/themes/aura';
+import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
+import App from './App.vue';
+import router from './router';
+import Tooltip from 'primevue/tooltip';
 
-import 'swiper/css'
-import 'swiper/css/pagination'
-import '@/assets/css/style.css'
-import 'preline/dist'
+const app = createApp(App);
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 
-import { createHead } from '@vueuse/head'
+app.use(pinia);
+app.use(router);
+app.use(PrimeVue, {
+  theme: {
+    preset: Aura,
+    options: {
+      prefix: 'p',
+      darkModeSelector: '.dark',
+    },
+  },
+});
 
-const app = createApp(App)
-
-const pinia = createPinia()
-pinia.use(piniaPersistedState)
-
-app.use(pinia)
-app.use(router)
-app.use(createHead())
-
-router.afterEach(() => {
-  setTimeout(() => {
-    if (window.HSStaticMethods?.autoInit) {
-      window.HSStaticMethods.autoInit()
-    }
-  }, 0)
-})
-
-app.mount('#app')
+app.directive('tooltip', Tooltip);
+app.use(ToastService);
+app.use(ConfirmationService);
+app.mount('#app');

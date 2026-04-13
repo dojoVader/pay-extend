@@ -1,38 +1,27 @@
 <template>
-  <Auth>
-    <div class="mt-8 text-center">
-      <div class="mb-4">
-        <Icon icon="lucide:log-out" class="size-6 text-purple-500 fill-purple-100 mx-auto"></Icon>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50">
+    <div class="text-center">
+      <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-4">
+        <Icon icon="lucide:log-out" class="text-indigo-600 text-xl" />
       </div>
-      <h4 class="mb-2 text-primary text-xl font-semibold">You are Logged Out</h4>
-      <p class="mb-8 text-base text-default-500">Thank you for using payextend admin template</p>
+      <h2 class="text-lg font-semibold text-gray-900 mb-1">Signing out…</h2>
+      <p class="text-sm text-gray-500">You'll be redirected to login shortly.</p>
     </div>
-    <RouterLink to="/auth/login">
-      <button class="btn bg-primary text-white w-full">Sign In</button>
-    </RouterLink>
-  </Auth>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import Auth from '@/layouts/auth.vue'
-import { RouterLink, useRouter } from 'vue-router'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { Icon } from '@iconify/vue'
+import { useAuth } from '@/stores/auth'
 
+const auth = useAuth()
 const router = useRouter()
 
-function mockLogout() {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => {
-      // clear local mock session/storage if any (no-op here)
-      resolve()
-    }, 400)
-  })
-}
-
 onMounted(async () => {
-  await mockLogout()
-  // navigate to login after logout
+  auth.logout()
+  await new Promise((r) => setTimeout(r, 800))
   await router.push('/auth/login')
 })
 </script>

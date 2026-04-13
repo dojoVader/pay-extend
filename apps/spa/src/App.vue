@@ -3,13 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-import { useLayout } from './stores/layout'
+import { useTheme } from '@/stores/theme'
 
-const { init } = useLayout()
-
-onMounted(() => {
-  init()
-})
+// Initialize theme on app start so the dark class is applied on every page
+useTheme()
 </script>

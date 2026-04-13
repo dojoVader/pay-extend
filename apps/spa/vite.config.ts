@@ -1,36 +1,35 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
-// import vueDevTools from 'vite-plugin-vue-devtools'
 
-// https://vite.dev/config/
 export default defineConfig({
-  // Use a relative base so the built index and assets resolve correctly when served
-  // from nginx (especially if served from a subpath or opened via filesystem for tests).
   base: '/',
-  dev: {
-    sourcemap: true,
-  },
-
-  plugins: [
-    vue(),
-    tailwindcss(),
-  ],
+  plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-
-  // Dev server: bind to 0.0.0.0 so nginx or Docker can proxy to it if needed
   server: {
+    watch: {
+      usePolling: true,
+      interval: 1000, // Optional: polling interval in milliseconds
+    },
     host: '0.0.0.0',
-    port: 9090,
+    port: 5173,
+    hmr: {
+      host: 'localhost',
+      port: 5173,
+      clientPort: 5173,
+    },
+    proxy: {
+      '/api': {
+        target: 'http://backend:3000',
+        changeOrigin: true,
+      },
+    },
   },
-
-  // Build options tuned for serving with nginx: hashed assets and dedicated assets dir
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -39,8 +38,8 @@ export default defineConfig({
       output: {
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]'
-      }
-    }
-  }
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+      },
+    },
+  },
 })

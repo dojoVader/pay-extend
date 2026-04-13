@@ -1,6 +1,6 @@
 # Packages Directory
 
-This directory is part of the Yarn workspaces configuration for the pay-extend project. It's intended to hold additional packages that will be part of the monorepo structure.
+This directory is part of the Yarn workspaces configuration for the polarkit project. It's intended to hold additional packages that will be part of the monorepo structure.
 
 ## Adding a New Package
 

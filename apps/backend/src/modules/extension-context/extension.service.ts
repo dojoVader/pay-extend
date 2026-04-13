@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ExtensionContext } from '../../dtos/entities/extension.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,11 +40,19 @@ export class ExtensionService {
     return this.extensionRepository.find();
   }
   /**
-   * This method saves an extension to the PayExtend platform allowing the user
+   * This method saves an extension to the Polarkit platform allowing the user
    * to add extensions to the platform
    * @param data ExtensionRequest
    * @returns
    */
+  async getExtensionById(id: string): Promise<ExtensionContext> {
+    const extension = await this.extensionRepository.findOneBy({ id });
+    if (!extension) {
+      throw new NotFoundException(`Extension with id ${id} not found`);
+    }
+    return extension;
+  }
+
   async create(data: ExtensionRequest) {
     const extension = this.extensionRepository.create(data);
     return this.extensionRepository.save(extension);

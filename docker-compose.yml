@@ -1,34 +1,64 @@
 services:
   frontend:
     build: ./apps/spa
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./apps/spa:/app
+      - /app/node_modules
     depends_on:
       - backend
-    restart: always
+    develop:
+      watch:
+        - action: sync
+          path: apps/spa/src
+          target: /app/src
+        - action: sync
+          path: apps/spa/public
+          target: /app/public
+        - action: sync+restart
+          path: apps/spa/package.json
+          target: /app/package.json
 
   backend:
     build: ./apps/backend
+    ports:
+      - "9229:9229" # For Node.js debugging if needed
     environment:
       - DB_HOST=db
       - DB_PORT=3306
       - DB_USERNAME=x64
       - DB_PASSWORD=password
-      - DB_NAME=payextend_platform
+      - DB_NAME=polarkit_platform
       - SECRET=Yd8hPzX5qW3rT7gJ9kL2mN4bV6cX8jF1aS3dE5fG7hJ9kL2mN4bV6cX8
       - PORT=3000
+      - CLIENT_ID=639779968563-i3n3uqt1ij4j53ddgr113ae6dchv7fbl.apps.googleusercontent.com
+      - CLIENT_SECRET=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
+      - REFRESH_TOKEN=1//04rfOhzdZSho1CgYIARAAGAQSNwF-L9IrCIxACHN6Sv2NmFX_j4zJczDBxVzsSKyeo5ycSymsvGGdpB2sUiaivSkji9fPyZQBhg0
+      - POLAR_ACCESS_TOKEN=
       # Add other env vars (e.g., JWT secrets, FIREBASE credentials)
     depends_on:
       - db
     restart: always
+    develop:
+        watch:
+            - action: sync+restart
+              path: apps/backend
+              target: ./dist/
+              ignore:
+                - node_modules
 
   nginx:
-    image: nginx:stable-alpine
+    build: apps/spa
     ports:
-      - "80:80"
+      - "7000:80"
+
     volumes:
-      - ./apps/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./apps/spa/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - frontend
       - backend
+
 
   db:
     image: mariadb:10.11
@@ -36,9 +66,9 @@ services:
     command: '--default-authentication-plugin=mysql_native_password'
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=payextend_platform
-      - MYSQL_USER=x64
-      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=polarkit_platform
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=Alpha.01$
     volumes:
       - ./docker/db/data:/var/lib/mysql
       - ./docker/db/sql:/docker-entrypoint-initdb.d

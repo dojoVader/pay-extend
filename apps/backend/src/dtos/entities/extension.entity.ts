@@ -3,8 +3,8 @@ import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 @Entity()
 export class ExtensionContext {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @IsString()
   @IsNotEmpty()

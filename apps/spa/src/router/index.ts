@@ -1,164 +1,86 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '@/stores/auth'
+import { createRouter, createWebHistory } from 'vue-router';
+import { useAuth } from '@/stores/auth';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: '/', redirect: '/dashboard' },
     {
-      path: '/',
-      redirect: '/dashboard/hr'
-    },
-    {
-      path: '/dashboard/hr',
-      name: 'Dashboard Hr',
-      meta: {
-        title: 'Dashboard Hr'
-      },
-      component: () => import('@/views/dashboard/hr/index.vue')
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: () => import('@/views/dashboard/index.vue'),
     },
     {
       path: '/extension/index',
       name: 'Extension Management',
-      meta: {
-        title: 'Extension Management'
-      },
-      component: () => import('@/views/extension-management/list/index.vue')
+      component: () => import('@/views/extension-management/index.vue'),
+    },
+    {
+      path: '/extension/item/:id',
+      name: 'Extension Item',
+      component: () => import('@/views/extension-item/index.vue'),
+    },
+    {
+      path: '/extension/discounts',
+      name: 'Discounts',
+      component: () => import('@/views/discounts/index.vue'),
     },
     {
       path: '/extension/dom-selector',
       name: 'DOM Selectors',
-      meta: {
-        title: 'DOM Selectors'
-      },
-      component: () => import('@/views/dom-selectors/list/index.vue')
+      component: () => import('@/views/dom-selectors/index.vue'),
     },
     {
       path: '/extension/logs',
       name: 'Logs',
-      meta: {
-        title: 'Logs'
-      },
-      component: () => import('@/views/extension-logs/list/index.vue')
+      component: () => import('@/views/extension-logs/index.vue'),
     },
     {
       path: '/integrations/payment',
       name: 'Payment Integrations',
-      meta: {
-        title: 'Payment Integrations'
-      },
-      component: () => import('@/views/integrations/modules/index.vue')
+      component: () => import('@/views/integrations/index.vue'),
     },
     {
       path: '/integrations/payment/stripe',
       name: 'Stripe',
-      meta: {
-        title: 'Stripe Settings'
-      },
-      component: () => import('@/views/integrations/modules/stripe/index.vue')
+      component: () => import('@/views/integrations/polar/index.vue'),
+    },
+    {
+      path: '/integrations/payment/firebase-admin',
+      name: 'Firebase Admin',
+      component: () => import('@/views/integrations/firebase-admin/index.vue'),
     },
     {
       path: '/integrations/notification/smtp',
       name: 'SMTP Settings',
-      meta: {
-        title: 'SMTP Settings'
-      },
-      component: () => import('@/views/integrations/modules/smtp/smtp.vue')
+      component: () => import('@/views/integrations/smtp/index.vue'),
     },
     {
       path: '/integrations/extension/chrome-webstore',
       name: 'Chrome Webstore Settings',
-      meta: {
-        title: 'Chrome Webstore Settings'
-      },
-      component: () => import('@/views/integrations/modules/chrome-webstore/index.vue')
+      component: () => import('@/views/integrations/chrome-webstore/index.vue'),
     },
-
-
-    // auth routes
+    {
+      path: '/customers',
+      name: 'Customers',
+      component: () => import('@/views/customers/index.vue'),
+    },
     {
       path: '/auth/login',
       name: 'Login',
-      meta: {
-        title: 'Login'
-      },
-      component: () => import('@/views/auth/login/index.vue')
+      component: () => import('@/views/auth/login/index.vue'),
     },
     {
       path: '/auth/register',
       name: 'Register',
-      meta: {
-        title: 'Register'
-      },
-      component: () => import('@/views/auth/register/index.vue')
+      component: () => import('@/views/auth/register/index.vue'),
     },
     {
       path: '/auth/logout',
       name: 'Logout',
-      meta: {
-        title: 'Logout'
-      },
-      component: () => import('@/views/auth/logout/index.vue')
+      component: () => import('@/views/auth/logout/index.vue'),
     },
-    {
-      path: '/auth/reset-pass',
-      name: 'Reset Password',
-      meta: {
-        title: 'Reset Password'
-      },
-      component: () => import('@/views/auth/reset-pass/index.vue')
-    },
-    {
-      path: '/auth/create-pass',
-      name: 'Create Password',
-      meta: {
-        title: 'Create Password'
-      },
-      component: () => import('@/views/auth/create-pass/index.vue')
-    },
-    {
-      path: '/auth/verify-email',
-      name: 'Verify Email',
-      meta: {
-        title: 'Verify Email'
-      },
-      component: () => import('@/views/auth/verify-email/index.vue')
-    },
-    {
-      path: '/auth/two-steps',
-      name: 'Two Step Verification',
-      meta: {
-        title: 'Two Step Verification'
-      },
-      component: () => import('@/views/auth/two-steps/index.vue')
-    }
-  ]
-})
+  ],
+});
 
-// Global navigation guard: ensure routes (except /auth/*) have an active auth token.
-router.beforeEach((to, from, next) => {
-  try {
-    const auth = useAuth()
-    // primary check: localStorage token (explicit requirement), fallback to store
-    const lsToken = localStorage.getItem('auth')
-    const storeToken = auth?.user?.token
-    const token = lsToken || storeToken
-
-    // allow access to auth routes (login/register/etc.) and public root
-    if (to.path.startsWith('/auth') || to.path === '/') {
-      return next()
-    }
-
-    // If there's no token, redirect to login and preserve intended path
-    if (!token) {
-      return next({ path: '/auth/login', query: { redirect: to.fullPath } })
-    }
-
-    // token exists — proceed
-    return next()
-  } catch {
-    // In case Pinia isn't ready or something fails, allow navigation to login
-    return next({ path: '/auth/login', query: { redirect: to.fullPath } })
-  }
-})
-
-export default router
+export default router;
